@@ -1,0 +1,2524 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeeshan Danish Couture | 4K Scroll-Driven 3D Atelier — Royal Residency, Main Tariq Rd</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js r128 (WebGL 4K PBR 3D Engine) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Google Fonts: Cinzel, Cormorant Garamond, Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        studioLight: '#F7F4EF',
+                        studioBase: '#F2ECE1',
+                        studioWarm: '#EAE4D8',
+                        studioMuted: '#DDD5C7',
+                        espresso: '#1A1412',
+                        espressoBtn: '#140F0E',
+                        muted: '#6B6259',
+                        gold: '#B89146',
+                        goldBright: '#E7C98B',
+                        goldDeep: '#8A6621',
+                        crimson: '#6B0918',
+                        crimsonDeep: '#3A040C',
+                        whatsappGreen: '#25D366',
+                        whatsappDark: '#128C7E'
+                    },
+                    fontFamily: {
+                        cinzel: ['"Cinzel"', 'serif'],
+                        serif: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
+                        display: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'editorial': '0 25px 60px -15px rgba(26, 20, 18, 0.12)',
+                        'pill': '0 14px 30px -6px rgba(20, 15, 14, 0.35)',
+                        'wa': '0 10px 25px -4px rgba(37, 211, 102, 0.35)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F2ECE1;
+            color: #1A1412;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Warm Haute Couture Studio Radial Gradient Backdrop */
+        .hero-studio-gradient {
+            background: radial-gradient(circle at 50% 48%, #FFFFFF 0%, #F7F4EF 36%, #EFE8DC 70%, #E0D5C3 100%);
+        }
+
+        /* FIXED FULL-VIEWPORT 4K 3D COUTURE STAGE */
+        #fixed-webgl-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: auto;
+            overflow: hidden;
+        }
+
+        #couture-webgl-canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            outline: none;
+            cursor: grab;
+        }
+        #couture-webgl-canvas:active {
+            cursor: grabbing;
+        }
+
+        /* Natural Scrolling Foreground Layer */
+        #scrolling-foreground-content {
+            position: relative;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Enable pointer interactions on editorial cards, forms, buttons & links */
+        .interactive-surface {
+            pointer-events: auto;
+        }
+
+        /* Editorial Frosted Glass Accents */
+        .editorial-accent-card {
+            background: rgba(247, 244, 239, 0.84);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 50px -10px rgba(26, 20, 18, 0.08);
+        }
+
+        .editorial-tag-pill {
+            background: rgba(247, 244, 239, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(26, 20, 18, 0.08);
+        }
+
+        /* Luxury Pill Shimmer Button */
+        .btn-pill-video {
+            background-color: #140F0E;
+            color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .btn-pill-video:hover {
+            background-color: #8A6621;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -8px rgba(138, 102, 33, 0.45);
+        }
+        .btn-pill-video::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -75%;
+            width: 45%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+            transform: rotate(28deg);
+            transition: all 0.65s ease;
+        }
+        .btn-pill-video:hover::after {
+            left: 135%;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F2ECE1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B89146;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8A6621;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold selection:text-white antialiased">
+
+    <!-- ================= 0. FIXED FULL-VIEWPORT 4K 3D BRIDAL COUTURE STAGE (`z-index: 0`) ================= -->
+    <div id="fixed-webgl-background" class="hero-studio-gradient">
+        <canvas id="couture-webgl-canvas"></canvas>
+
+        <!-- Subtle Haute Couture Vignette Ring -->
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_52%,rgba(26,20,18,0.08)_100%)]"></div>
+    </div>
+
+    <!-- ================= 1. FIXED LUXURY NAVIGATION BAR (`z-index: 50`) ================= -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-studioLight/85 backdrop-blur-md border-b border-espresso/5 transition-all duration-300">
+        <div class="max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
+            
+            <!-- Left: Brand Title in Architectural Serif + Gold Tariq Rd Signature -->
+            <a href="index.html" class="group flex flex-col">
+                <span class="font-cinzel text-xl sm:text-2xl font-bold tracking-wider text-espresso leading-none group-hover:text-goldDeep transition-colors">
+                    ZEESHAN DANISH
+                </span>
+                <span class="text-[8px] sm:text-[8.5px] uppercase tracking-[0.42em] text-goldDeep mt-1 font-semibold">
+                    COUTURE • ROYAL RESIDENCY • TARIQ RD
+                </span>
+            </a>
+
+            <!-- Center Navigation Links -->
+            <nav class="hidden lg:flex items-center space-x-8 text-[11.5px] font-medium tracking-wider uppercase text-espresso/80">
+                <a id="nav-atelier-link" href="javascript:void(0)" onclick="switchView('atelier')" class="text-espresso font-semibold relative after:content-[''] after:absolute after:-bottom-1.5 after:left-0 after:w-full after:h-[1.5px] after:bg-espresso cursor-pointer">
+                    Editorial Atelier
+                </a>
+                <a href="#section-heritage" onclick="if(currentView!=='atelier')switchView('atelier');" class="hover:text-espresso transition-colors relative group cursor-pointer">
+                    24K Zardozi Craft
+                    <span class="absolute -bottom-1.5 left-0 w-0 h-[1.5px] bg-gold transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#pick-and-drape" onclick="if(currentView!=='atelier')switchView('atelier');" class="hover:text-espresso transition-colors relative group cursor-pointer">
+                    Live 3D Customizer
+                    <span class="absolute -bottom-1.5 left-0 w-0 h-[1.5px] bg-gold transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a id="nav-catalog-link" href="javascript:void(0)" onclick="switchView('catalog')" class="text-goldDeep font-semibold hover:text-espresso transition-colors relative group cursor-pointer">
+                    Catalog Gallery (12 Pieces)
+                    <span class="absolute -bottom-1.5 left-0 w-0 h-[1.5px] bg-gold transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#tariq-rd-atelier" onclick="if(currentView!=='atelier')switchView('atelier');" class="hover:text-espresso transition-colors relative group text-espresso font-medium cursor-pointer">
+                    Flagship Booking
+                    <span class="absolute -bottom-1.5 left-0 w-0 h-[1.5px] bg-espresso transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </nav>
+
+            <!-- Right Utility Badges, WhatsApp Quick Connect & Modals -->
+            <div class="flex items-center space-x-3 sm:space-x-5 text-espresso/85">
+                
+                <!-- Quick WhatsApp Header Pill -->
+                <button onclick="inquireOnWhatsApp('General Bridal Inquiry: Hello Zeeshan Danish Couture, I would like to connect with your senior bridal stylist regarding a bespoke appointment at Royal Residency, Emerald, Main Tariq Rd.')" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/40 text-espresso text-[10.5px] font-semibold tracking-wider transition-colors" title="Chat on Tariq Rd WhatsApp">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                    <span>Tariq Rd WhatsApp</span>
+                </button>
+
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-studioWarm/85 border border-espresso/10 text-[10px] font-semibold tracking-wider uppercase">
+                    <span class="w-1.5 h-1.5 rounded-full bg-goldDeep animate-pulse"></span>
+                    <span>Scroll:</span>
+                    <span id="nav-scroll-pct" class="text-goldDeep font-mono font-bold">0%</span>
+                </div>
+
+                <button onclick="toggleSearchModal()" aria-label="Search Couture Archive" class="hover:text-goldDeep transition-colors p-1.5" title="Search Couture Archive">
+                    <i class="fa-solid fa-magnifying-glass text-[13.5px]"></i>
+                </button>
+                
+                <button onclick="toggleDrawer('wishlist')" aria-label="Saved Lookbook" class="hover:text-goldDeep transition-colors p-1.5 relative" title="Saved Lookbook">
+                    <i class="fa-regular fa-heart text-[13.5px]"></i>
+                    <span id="wishlist-badge" class="absolute -top-0.5 -right-1 w-3.5 h-3.5 rounded-full bg-gold text-white text-[8.5px] font-semibold flex items-center justify-center">2</span>
+                </button>
+
+                <button onclick="toggleDrawer('bag')" aria-label="Bespoke Bag" class="hover:text-goldDeep transition-colors p-1.5 relative" title="Bespoke Fitting Bag">
+                    <i class="fa-solid fa-bag-shopping text-[13.5px]"></i>
+                    <span id="bag-badge" class="absolute -top-0.5 -right-1 w-3.5 h-3.5 rounded-full bg-espresso text-white text-[8.5px] font-semibold flex items-center justify-center">1</span>
+                </button>
+
+                <a href="#tariq-rd-atelier" aria-label="Book Bridal Appointment" class="hover:text-goldDeep transition-colors p-1.5" title="Book Bridal Appointment">
+                    <i class="fa-regular fa-calendar-check text-[13.5px]"></i>
+                </a>
+
+                <button onclick="toggleMobileMenu()" aria-label="Open Mobile Menu" class="lg:hidden p-1.5 text-espresso">
+                    <i class="fa-solid fa-bars-staggered text-base"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-studioLight border-b border-espresso/10 px-6 py-5 space-y-3 text-xs uppercase tracking-widest">
+            <a href="javascript:void(0)" onclick="switchView('atelier'); toggleMobileMenu()" class="block py-2 text-espresso font-semibold border-b border-espresso/5">Editorial Atelier</a>
+            <a href="#section-heritage" onclick="if(currentView!=='atelier')switchView('atelier'); toggleMobileMenu()" class="block py-2 text-espresso/80 border-b border-espresso/5">24K Zardozi Heritage</a>
+            <a href="#pick-and-drape" onclick="if(currentView!=='atelier')switchView('atelier'); toggleMobileMenu()" class="block py-2 text-espresso/80 border-b border-espresso/5">Live 3D Customizer</a>
+            <a href="javascript:void(0)" onclick="switchView('catalog'); toggleMobileMenu()" class="block py-2 text-goldDeep font-semibold border-b border-espresso/5">Catalog Gallery (12 Pieces)</a>
+            <a href="#tariq-rd-atelier" onclick="if(currentView!=='atelier')switchView('atelier'); toggleMobileMenu()" class="block py-2 text-espresso font-semibold border-b border-espresso/5">Tariq Rd Booking</a>
+            <button onclick="inquireOnWhatsApp('Mobile Navigation: Hello Zeeshan Danish Couture, I would like to speak to your concierge at Royal Residency, Emerald, Main Tariq Rd.')" class="w-full text-left py-2 text-emerald-700 font-bold flex items-center gap-2">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>Direct Studio WhatsApp</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ================= NATURAL SCROLLING FOREGROUND LAYER (`z-index: 10`) ================= -->
+    <main id="scrolling-foreground-content" class="pt-20">
+
+        <!-- ================= VIEW 1: NARRATIVE 3D ATELIER EDITORIAL ================= -->
+        <div id="view-atelier">
+
+        <!-- ================= SECTION 1: FULL SURFACE EDITORIAL HERO WITH DEDICATED WHATSAPP ACTION ================= -->
+        <section id="section-hero" class="min-h-[94vh] max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12 flex flex-col justify-between py-6 lg:py-10">
+            
+            <!-- Magazine Top Running Header -->
+            <div class="interactive-surface flex flex-wrap items-center justify-between gap-4 border-b border-espresso/10 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-[9.5px] uppercase tracking-[0.32em] font-cinzel font-bold text-espresso">
+                        Vol. XXIV • Haute Couture Edition
+                    </span>
+                    <span class="text-espresso/20">•</span>
+                    <span class="text-[9px] uppercase tracking-[0.26em] text-goldDeep font-semibold">
+                        Royal Residency, Emerald, Main Tariq Rd, Karachi
+                    </span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-crimson animate-pulse"></span>
+                    <span class="text-[9px] uppercase tracking-[0.24em] font-mono text-muted">
+                        3D Scroll Assembly Active • 4K PBR Engine
+                    </span>
+                </div>
+            </div>
+
+            <!-- Main Editorial Surface Grid (Unobstructed Viewport for 3D Model) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 my-auto items-center py-6">
+                
+                <!-- Left 5 Columns: Massive Architectural Haute Couture Typography -->
+                <div class="lg:col-span-5 interactive-surface space-y-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full editorial-tag-pill text-[9.5px] uppercase tracking-[0.28em] text-crimson font-bold">
+                        <span>Autumn / Winter Bridal Reveal</span>
+                    </div>
+
+                    <h1 class="font-display text-5xl sm:text-7xl xl:text-[84px] font-normal text-espresso leading-[0.92] tracking-tight">
+                        Sindoor<br>
+                        <span class="font-serif italic font-normal text-goldDeep">Velvet</span><br>
+                        Couture
+                    </h1>
+
+                    <p class="text-xs sm:text-sm leading-relaxed text-muted max-w-md font-normal">
+                        Handcrafted 24-kali Pakistani bridal lehengas, custom-cut on individual wooden addas at our Main Tariq Road flagship. Scroll down to assemble <strong>24 micro-velvet pleats, gold-tissue dupatta, and 24K Zardozi floral vines</strong> in live 3D.
+                    </p>
+
+                    <!-- CTAs with Dynamic WhatsApp Inquiry -->
+                    <div class="pt-2 flex flex-wrap items-center gap-3">
+                        <a href="#pick-and-drape" class="btn-pill-video text-[10.5px] sm:text-[11px] uppercase tracking-[0.2em] font-semibold px-7 py-3.5 sm:py-4 rounded-full shadow-pill">
+                            Live 3D Customizer
+                        </a>
+                        <button onclick="inquireOnWhatsApp('Hero Inquiry: Hello Zeeshan Danish Couture, I am looking at your Sindoor Velvet Couture collection. I would like to inquire about booking a bridal trial at your Royal Residency, Emerald, Tariq Rd studio.')" class="px-6 py-3.5 sm:py-4 rounded-full border border-emerald-700/40 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 text-[10.5px] sm:text-[11px] uppercase tracking-[0.16em] font-bold transition-all flex items-center gap-2 shadow-xs">
+                            <i class="fa-brands fa-whatsapp text-emerald-600 text-base"></i>
+                            <span>Inquire via WhatsApp</span>
+                        </button>
+                        <button onclick="switchView('catalog')" class="px-5 py-3.5 sm:py-4 rounded-full border border-espresso/20 hover:border-espresso text-espresso text-[10.5px] sm:text-[11px] uppercase tracking-[0.16em] font-semibold transition-all bg-white/70 flex items-center gap-1.5 cursor-pointer">
+                            <span>Catalog Gallery Archive</span>
+                            <i class="fa-solid fa-arrow-right text-[10px] text-goldDeep"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Center 3 Columns: Open Visual Window for 3D Mannequin -->
+                <div class="hidden lg:block lg:col-span-3 h-[60vh] pointer-events-none"></div>
+
+                <!-- Right 4 Columns: Editorial Technical Telemetry & Atelier Specifications -->
+                <div class="lg:col-span-4 interactive-surface space-y-4">
+                    
+                    <div class="editorial-accent-card rounded-3xl p-6 sm:p-7 space-y-5">
+                        <div class="flex items-center justify-between border-b border-espresso/10 pb-3">
+                            <span class="text-[9.5px] uppercase tracking-[0.24em] font-cinzel font-bold text-goldDeep">
+                                Atelier Specification
+                            </span>
+                            <span class="text-[9px] uppercase tracking-widest text-muted font-mono">
+                                Spec No. 24K-ZD
+                            </span>
+                        </div>
+
+                        <!-- Telemetry Grid -->
+                        <div class="space-y-3.5 text-xs">
+                            <div class="flex items-center justify-between pb-2 border-b border-espresso/5">
+                                <span class="text-muted">24-Kali Architecture</span>
+                                <span id="metric-drape" class="font-serif text-base font-bold text-espresso">12% Draped</span>
+                            </div>
+                            <div class="flex items-center justify-between pb-2 border-b border-espresso/5">
+                                <span class="text-muted">24K Gold Zardozi</span>
+                                <span id="metric-zardozi" class="font-serif text-base font-bold text-goldDeep">0 Hrs Woven</span>
+                            </div>
+                            <div class="flex items-center justify-between pb-2 border-b border-espresso/5">
+                                <span class="text-muted">Royal Kundan &amp; Gems</span>
+                                <span id="metric-kundan" class="font-serif text-base font-bold text-crimson">Preparing</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-muted">Primary Textile</span>
+                                <span class="font-semibold text-espresso">9000 Micro-Velvet</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-espresso/10 flex items-center justify-between text-[11px]">
+                            <span class="text-muted">Karachi Studio:</span>
+                            <span class="font-cinzel text-espresso font-bold">Royal Residency, Emerald</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Swatch Jump Bar with Direct WhatsApp Trigger -->
+                    <div class="editorial-tag-pill rounded-2xl p-3 flex items-center justify-between gap-3 text-xs">
+                        <span class="text-[9.5px] uppercase tracking-widest text-muted font-semibold">Live Palettes:</span>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="selectBespokeSwatch(0)" class="w-5 h-5 rounded-full bg-[#6B0918] border border-white shadow" title="Crimson Velvet"></button>
+                            <button onclick="selectBespokeSwatch(1)" class="w-5 h-5 rounded-full bg-[#EAE0D0] border border-espresso/20 shadow" title="Nikkah Ivory"></button>
+                            <button onclick="selectBespokeSwatch(2)" class="w-5 h-5 rounded-full bg-[#0B382B] border border-white shadow" title="Emerald Silk"></button>
+                            <button onclick="selectBespokeSwatch(3)" class="w-5 h-5 rounded-full bg-[#9E5A63] border border-white shadow" title="Walima Rose"></button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Magazine Bottom Bar with Scroll Cue -->
+            <div class="interactive-surface flex flex-wrap items-center justify-between gap-4 border-t border-espresso/10 pt-4 text-[10px] text-muted">
+                <div class="flex items-center gap-2 uppercase tracking-[0.24em] font-semibold">
+                    <i class="fa-solid fa-angles-down text-goldDeep animate-bounce"></i>
+                    <span>Scroll To Assemble The 24-Kali Bridal Ensemble In Realtime</span>
+                </div>
+                <div class="flex items-center gap-4 uppercase tracking-widest">
+                    <span>PBR Micro-Velvet</span>
+                    <span>•</span>
+                    <span>24K Gold Marori</span>
+                    <span>•</span>
+                    <span>Gossamer Veil</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= SECTION 2: 24K ZARDOZI CRAFT & HAND-ADDA ARCHITECTURE (25% – 55% Page Scroll) ================= -->
+        <section id="section-heritage" class="min-h-[88vh] max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12 py-20 flex items-center">
+            <div class="w-full grid grid-cols-1 lg:grid-cols-12 items-center gap-8">
+                
+                <!-- Left 6 Columns: Editorial Craft Narrative -->
+                <div class="lg:col-span-6 interactive-surface editorial-accent-card rounded-3xl p-7 sm:p-12 space-y-6">
+                    <div class="inline-flex items-center gap-2.5">
+                        <span class="w-8 h-[1px] bg-goldDeep"></span>
+                        <span class="text-[10px] uppercase tracking-[0.28em] text-goldDeep font-bold font-cinzel">Stage 02 • Adda Architecture</span>
+                    </div>
+
+                    <h2 class="font-serif text-3xl sm:text-5xl text-espresso font-normal leading-tight">
+                        24 Hand-Pleated Kaliyan &amp; Gossamer Veil
+                    </h2>
+
+                    <p class="text-xs sm:text-sm text-muted leading-relaxed">
+                        Notice how the background mannequin has locked all <strong>24 individual Micro-Velvet Kaliyan</strong> around the waist while draping the sheer gold-tissue Organza Dupatta over the shoulders. At <strong>Royal Residency, Emerald, Main Tariq Rd</strong>, every bridal silhouette is cut on individual wooden frames to achieve a weightless royal flare.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="p-4 rounded-2xl bg-white/80 border border-espresso/10">
+                            <span class="text-[9.5px] uppercase tracking-widest text-goldDeep font-bold block">01. Kora &amp; Dabka Relief</span>
+                            <h3 class="font-serif text-lg font-bold text-espresso mt-1">3D Mughal Mihrab Arches</h3>
+                            <p class="text-xs text-muted mt-1 leading-relaxed">
+                                Master karigars spend up to 580 hours hand-stitching raised metallic bullion coils along each kali seam.
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/80 border border-espresso/10">
+                            <span class="text-[9.5px] uppercase tracking-widest text-crimson font-bold block">02. Double-Drape Veil</span>
+                            <h3 class="font-serif text-lg font-bold text-espresso mt-1">Scalloped Kiran Borders</h3>
+                            <p class="text-xs text-muted mt-1 leading-relaxed">
+                                Pure silk tissue dupattas finished with hand-knotted gold gota, pearl tassels, and bespoke Nikkah calligraphy.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex flex-wrap items-center gap-3.5">
+                        <a href="#pick-and-drape" class="btn-pill-video text-[10.5px] uppercase tracking-[0.2em] font-semibold px-7 py-3.5 rounded-full">
+                            Customize Live Colors
+                        </a>
+                        <button onclick="inquireOnWhatsApp('Craft Inquiry: Hello Zeeshan Danish Couture, I would like to inquire about your 24K Zardozi and hand-adda embroidery process, and schedule a craft consultation at Tariq Rd.')" class="px-6 py-3.5 rounded-full border border-emerald-700/40 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[10.5px] uppercase tracking-[0.16em] font-bold transition-all flex items-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-emerald-600 text-base"></i>
+                            <span>Inquire Craft on WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right 6 Columns: Open Viewport Window where the 3D Bridal Mannequin shines -->
+                <div class="hidden lg:block lg:col-span-6 h-[65vh] pointer-events-none"></div>
+
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: LIVE 3D BRIDAL CUSTOMIZER ("PICK & DRAPE") WITH CONTEXTUAL WHATSAPP ================= -->
+        <section id="pick-and-drape" class="min-h-[90vh] max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12 py-20 flex items-center">
+            <div class="w-full grid grid-cols-1 lg:grid-cols-12 items-center gap-8">
+                
+                <!-- Left 6 Columns: Open Viewport Window -->
+                <div class="hidden lg:flex lg:col-span-6 h-[68vh] pointer-events-none items-end justify-start pb-6">
+                    <div class="interactive-surface editorial-accent-card px-4 py-2.5 rounded-2xl flex items-center gap-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-goldDeep animate-pulse"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-espresso font-bold font-cinzel">
+                            Live 3D Shader Active • Click Swatches On The Right
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Right 6 Columns: Interactive Colorway, Cut & 3D Focus Controller -->
+                <div class="lg:col-span-6 interactive-surface editorial-accent-card rounded-3xl p-6 sm:p-9 space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-espresso/10 pb-4">
+                        <div>
+                            <span class="text-[9.5px] uppercase tracking-[0.26em] text-goldDeep font-bold font-cinzel">Stage 03 • Pick &amp; Drape 3D Studio</span>
+                            <h2 id="customizer-title" class="font-serif text-2xl sm:text-4xl text-espresso font-semibold mt-0.5">
+                                Royal Sindhi Crimson Micro-Velvet
+                            </h2>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[9.5px] uppercase tracking-widest text-muted block">Atelier Investment</span>
+                            <span id="customizer-price" class="font-serif text-2xl font-bold text-espresso">PKR 720,000</span>
+                        </div>
+                    </div>
+
+                    <!-- 4 Live 3D Swatch Buttons -->
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-muted font-bold mb-2.5">
+                            1. Select Live 3D Bridal Textile &amp; Zardozi Palette
+                        </label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            <button onclick="selectBespokeSwatch(0)" id="swatch-btn-0" class="p-3 rounded-2xl border-2 border-espresso bg-studioWarm/90 text-left transition-all">
+                                <span class="w-6 h-6 rounded-full bg-[#6B0918] block mb-1.5 border border-white/60 shadow"></span>
+                                <span class="text-xs font-semibold text-espresso block">Crimson Velvet</span>
+                                <span class="text-[9px] text-muted">24K Gold Zardozi</span>
+                            </button>
+
+                            <button onclick="selectBespokeSwatch(1)" id="swatch-btn-1" class="p-3 rounded-2xl border border-espresso/10 bg-white/80 hover:bg-studioWarm/50 text-left transition-all">
+                                <span class="w-6 h-6 rounded-full bg-[#EAE0D0] block mb-1.5 border border-espresso/20 shadow"></span>
+                                <span class="text-xs font-semibold text-espresso block">Nikkah Ivory</span>
+                                <span class="text-[9px] text-muted">Rose Gold &amp; Pearl</span>
+                            </button>
+
+                            <button onclick="selectBespokeSwatch(2)" id="swatch-btn-2" class="p-3 rounded-2xl border border-espresso/10 bg-white/80 hover:bg-studioWarm/50 text-left transition-all">
+                                <span class="w-6 h-6 rounded-full bg-[#0B382B] block mb-1.5 border border-white/60 shadow"></span>
+                                <span class="text-xs font-semibold text-espresso block">Emerald Silk</span>
+                                <span class="text-[9px] text-muted">Antique Tilla</span>
+                            </button>
+
+                            <button onclick="selectBespokeSwatch(3)" id="swatch-btn-3" class="p-3 rounded-2xl border border-espresso/10 bg-white/80 hover:bg-studioWarm/50 text-left transition-all">
+                                <span class="w-6 h-6 rounded-full bg-[#9E5A63] block mb-1.5 border border-white/60 shadow"></span>
+                                <span class="text-xs font-semibold text-espresso block">Walima Rose</span>
+                                <span class="text-[9px] text-muted">Silver-Gold Sitara</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Swatch Info Preview Card -->
+                    <div id="customizer-preview-box" class="relative rounded-2xl bg-gradient-to-br from-[#6B0918] via-[#3E040D] to-[#1D0105] p-5 text-studioLight overflow-hidden transition-all duration-500 shadow-inner">
+                        <div class="relative z-10 flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <span id="customizer-embroidery-tag" class="px-3 py-1 rounded-full bg-black/45 text-[9px] uppercase tracking-[0.2em] border border-white/15 text-goldBright">
+                                24K Gold Zardozi, Kora, Dabka &amp; Kundan
+                            </span>
+                            <span id="customizer-hours" class="text-xs font-semibold text-goldBright">580 Master Hours</span>
+                        </div>
+                        <p id="customizer-desc" class="relative z-10 text-xs text-studioLight/90 leading-relaxed mb-3">
+                            Deep sindoor crimson 9000 micro-velvet stretched on traditional wooden addas at our Main Tariq Road atelier. Hand-embroidered with Mughal architectural arches, 24K kora, dabka, and ruby Swarovski crystals.
+                        </p>
+                        <div class="relative z-10 grid grid-cols-2 gap-3 pt-2 border-t border-white/15 text-[11px]">
+                            <div>
+                                <span class="text-studioLight/65 block text-[8.5px] uppercase">Ghera Density</span>
+                                <span id="customizer-density" class="font-semibold text-white">24-Kali Heavy Ghera</span>
+                            </div>
+                            <div>
+                                <span class="text-studioLight/65 block text-[8.5px] uppercase">Recommended Event</span>
+                                <span id="customizer-event" class="font-semibold text-goldBright">Royal Barat Bride</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Silhouette Cut & 3D Camera Controls -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-wider text-muted font-bold mb-2">2. Silhouette Cut</label>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button type="button" onclick="setSilhouetteCut(this, '24-Kali Lehenga')" class="cut-btn py-2 px-2 rounded-xl border border-espresso bg-espresso text-white text-[10px] font-semibold">
+                                    24-Kali
+                                </button>
+                                <button type="button" onclick="setSilhouetteCut(this, 'Floor Pishwas')" class="cut-btn py-2 px-2 rounded-xl border border-espresso/15 bg-white text-espresso text-[10px] font-semibold hover:border-espresso">
+                                    Pishwas
+                                </button>
+                                <button type="button" onclick="setSilhouetteCut(this, 'Royal Gharara')" class="cut-btn py-2 px-2 rounded-xl border border-espresso/15 bg-white text-espresso text-[10px] font-semibold hover:border-espresso">
+                                    Gharara
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-wider text-muted font-bold mb-2">3. 3D Camera Focus</label>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button type="button" onclick="setCameraFocusMode('full')" class="py-2 px-2 rounded-xl border border-espresso/15 bg-white hover:border-espresso text-espresso text-[10px] font-semibold">
+                                    Full Look
+                                </button>
+                                <button type="button" onclick="setCameraFocusMode('daman')" class="py-2 px-2 rounded-xl border border-espresso/15 bg-white hover:border-espresso text-espresso text-[10px] font-semibold">
+                                    Daman Zoom
+                                </button>
+                                <button type="button" onclick="setCameraFocusMode('jewelry')" class="py-2 px-2 rounded-xl border border-espresso/15 bg-white hover:border-espresso text-espresso text-[10px] font-semibold">
+                                    Rani Haar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dual CTAs: Studio Reservation + Dynamic Contextual WhatsApp Button -->
+                    <div class="pt-1 flex flex-col sm:flex-row gap-3">
+                        <button onclick="bookCustomDrapeFitting()" class="flex-1 btn-pill-video text-[11px] uppercase tracking-[0.18em] font-semibold py-4 px-5 rounded-full text-center">
+                            Reserve Selection at Tariq Rd
+                        </button>
+                        <button onclick="inquireCustomSwatchOnWhatsApp()" class="sm:w-auto px-6 py-4 rounded-full border border-emerald-700/40 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[11px] uppercase tracking-[0.16em] font-bold transition-all flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-emerald-600 text-lg"></i>
+                            <span>Inquire Swatch on WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: CURATED LOOKBOOK SHOWCASE WITH WHATSAPP ON EVERY CARD ================= -->
+        <section id="collections" class="py-20 lg:py-28 max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12">
+            
+            <div class="interactive-surface editorial-accent-card rounded-3xl p-6 sm:p-10 mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2.5 mb-2">
+                        <span class="w-8 h-[1px] bg-goldDeep"></span>
+                        <span class="text-[10px] uppercase tracking-[0.28em] text-goldDeep font-bold font-cinzel">Stage 04 • Zeeshan Danish Archive</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-5xl text-espresso font-normal">Curated Couture Collections</h2>
+                </div>
+
+                <!-- Direct Links to Dedicated Catalog Gallery & General WhatsApp Concierge -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="inquireOnWhatsApp('Collections Inquiry: Hello Zeeshan Danish Couture, I would like to inquire about viewing your latest Bridal and Walima archive at Royal Residency, Emerald, Main Tariq Rd.')" class="px-5 py-3 rounded-full border border-emerald-700/40 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[11px] uppercase tracking-wider font-bold transition-colors flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                        <span>WhatsApp Bridal Desk</span>
+                    </button>
+                    <button onclick="switchView('catalog')" class="btn-pill-video text-[11px] uppercase tracking-wider font-semibold px-6 py-3 rounded-full flex items-center gap-2 shadow-pill cursor-pointer">
+                        <span>Open Full Catalog Gallery (12 Pieces)</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lookbook Grid (Showcases 6 Featured Pieces with Individual WhatsApp Inquiries) -->
+            <div id="catalog-grid" class="interactive-surface grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <!-- ================= SECTION 5: FLAGSHIP STUDIO & APPOINTMENT BOOKING WITH 1-CLICK WHATSAPP CONFIRM ================= -->
+        <section id="tariq-rd-atelier" class="py-20 lg:py-28 max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                
+                <!-- Left 5 Columns: Official Flagship Lounge Address -->
+                <div class="lg:col-span-5 interactive-surface editorial-accent-card rounded-3xl p-7 sm:p-9 space-y-6">
+                    <div class="inline-flex items-center gap-2">
+                        <span class="w-8 h-[1px] bg-goldDeep"></span>
+                        <span class="text-[10px] uppercase tracking-[0.28em] text-goldDeep font-bold font-cinzel">Flagship Bridal Sanctuary</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-5xl text-espresso leading-tight font-normal">
+                        Royal Residency, Emerald — Main Tariq Rd
+                    </h2>
+                    <p class="text-xs sm:text-sm text-muted leading-relaxed">
+                        Step into our private bridal sanctuary in the heart of Karachi's premier couture district. Experience one-on-one consultations with Zeeshan Danish's senior stylists, inspect live adda embroidery, and customize every thread of your wedding trousseau.
+                    </p>
+
+                    <!-- Address Details -->
+                    <div class="p-6 rounded-2xl bg-white/85 border border-gold/40 space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-espresso text-goldBright flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-location-dot text-lg"></i>
+                            </div>
+                            <div>
+                                <span class="text-[9px] uppercase tracking-[0.24em] text-goldDeep font-semibold font-cinzel">Verified Atelier Address</span>
+                                <h3 class="font-serif text-xl sm:text-2xl font-bold text-espresso mt-0.5">Zeeshan Danish Couture</h3>
+                                <p class="text-xs sm:text-sm text-espresso/90 mt-1 font-medium leading-relaxed">
+                                    Royal Residency, Emerald, Main Tariq Rd, PECHS, Karachi, Pakistan
+                                </p>
+                                <div class="mt-3.5 flex flex-wrap items-center gap-3">
+                                    <button onclick="copyAtelierAddress()" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-goldDeep hover:text-espresso transition-colors">
+                                        <i class="fa-regular fa-copy"></i>
+                                        <span id="copy-address-status">Copy Studio Address</span>
+                                    </button>
+                                    <a href="https://www.google.com/maps/search/?api=1&query=Zeeshan+Danish+Couture+Royal+Residency+Emerald+Main+Tariq+Rd+Karachi" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-espresso hover:text-goldDeep transition-colors underline underline-offset-4">
+                                        <span>Google Maps</span>
+                                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Direct WhatsApp Studio Line -->
+                        <div class="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-500/25 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-brands fa-whatsapp text-emerald-600 text-xl"></i>
+                                <div>
+                                    <span class="text-[9.5px] uppercase tracking-wider text-emerald-900 font-bold block">Tariq Rd WhatsApp Desk</span>
+                                    <span class="text-xs font-semibold text-emerald-950">+92 300 1234567</span>
+                                </div>
+                            </div>
+                            <button onclick="inquireOnWhatsApp('Hello Zeeshan Danish Couture, I would like to chat directly with your Tariq Road Bridal Concierge.')" class="px-3 py-1.5 rounded-full bg-emerald-600 text-white text-[10px] uppercase tracking-wider font-semibold hover:bg-emerald-700 transition-colors">
+                                Chat Now
+                            </button>
+                        </div>
+
+                        <div class="border-t border-espresso/10 pt-4 grid grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-muted block">Consultation Hours</span>
+                                <span class="font-semibold text-espresso mt-0.5 block">Mon – Sat: 12:00 PM – 10:00 PM</span>
+                                <span class="text-[11px] text-muted">Sunday: By Private Appointment</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-muted block">VIP Arrival</span>
+                                <span class="font-semibold text-espresso mt-0.5 block">Complimentary Valet</span>
+                                <span class="text-[11px] text-goldDeep">Royal Residency Emerald Gate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 7 Columns: Interactive Appointment Booking Form -->
+                <div class="lg:col-span-7 interactive-surface editorial-accent-card rounded-3xl p-7 sm:p-10">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-espresso/10 pb-5 mb-6">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-[0.24em] text-goldDeep font-semibold font-cinzel">Private Bridal &amp; Groom Suite</span>
+                            <h3 class="font-serif text-2xl sm:text-3xl text-espresso font-normal mt-0.5">Reserve Your Tariq Rd Appointment</h3>
+                        </div>
+                        <span class="px-3.5 py-1 rounded-full bg-gold/15 text-goldDeep text-[10px] uppercase tracking-widest font-semibold">
+                            Instant Confirmation
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-6">
+                        <button type="button" onclick="selectApptType('Bridal Couture Trial')" id="appt-mode-0" class="py-3 px-4 rounded-xl border-2 border-espresso bg-espresso text-white text-xs font-semibold text-left flex items-center justify-between">
+                            <span>1. Bridal Trial</span>
+                            <i class="fa-solid fa-crown text-goldBright"></i>
+                        </button>
+                        <button type="button" onclick="selectApptType('Groom & Bespoke Fitting')" id="appt-mode-1" class="py-3 px-4 rounded-xl border border-espresso/15 bg-white text-espresso text-xs font-semibold text-left flex items-center justify-between hover:border-espresso">
+                            <span>2. Bespoke Fitting</span>
+                            <i class="fa-solid fa-ruler-combined text-goldDeep"></i>
+                        </button>
+                        <button type="button" onclick="selectApptType('Overseas Video Consult')" id="appt-mode-2" class="py-3 px-4 rounded-xl border border-espresso/15 bg-white text-espresso text-xs font-semibold text-left flex items-center justify-between hover:border-espresso">
+                            <span>3. Video Consult</span>
+                            <i class="fa-solid fa-video text-goldDeep"></i>
+                        </button>
+                    </div>
+
+                    <form id="atelier-booking-form" onsubmit="submitAtelierBooking(event)" class="space-y-5">
+                        <input type="hidden" id="booking-mode-input" value="Bridal Couture Trial">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-[10.5px] uppercase tracking-wider text-muted font-semibold mb-2">Client / Bride Full Name *</label>
+                                <input type="text" id="client-name" required placeholder="e.g., Ayeza Khan" class="w-full px-4 py-3 rounded-xl bg-white border border-espresso/15 text-sm focus:outline-none focus:border-goldDeep">
+                            </div>
+                            <div>
+                                <label class="block text-[10.5px] uppercase tracking-wider text-muted font-semibold mb-2">WhatsApp Contact Number *</label>
+                                <input type="tel" id="client-phone" required placeholder="+92 300 0000000" class="w-full px-4 py-3 rounded-xl bg-white border border-espresso/15 text-sm focus:outline-none focus:border-goldDeep">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-[10.5px] uppercase tracking-wider text-muted font-semibold mb-2">Preferred Visit Date *</label>
+                                <input type="date" id="client-date" required class="w-full px-4 py-3 rounded-xl bg-white border border-espresso/15 text-sm focus:outline-none focus:border-goldDeep">
+                            </div>
+                            <div>
+                                <label class="block text-[10.5px] uppercase tracking-wider text-muted font-semibold mb-2">Select Time Slot *</label>
+                                <select id="client-slot" class="w-full px-4 py-3 rounded-xl bg-white border border-espresso/15 text-sm focus:outline-none focus:border-goldDeep">
+                                    <option value="01:00 PM – 02:30 PM">01:00 PM – 02:30 PM (Afternoon Suite)</option>
+                                    <option value="03:30 PM – 05:00 PM">03:30 PM – 05:00 PM (Early Evening Suite)</option>
+                                    <option value="06:00 PM – 07:30 PM">06:00 PM – 07:30 PM (Prime Bridal Slot)</option>
+                                    <option value="08:00 PM – 09:30 PM">08:00 PM – 09:30 PM (Private Late Lounge)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10.5px] uppercase tracking-wider text-muted font-semibold mb-2">Bespoke Preferences &amp; Event Dates</label>
+                            <textarea id="client-notes" rows="2" placeholder="Mention your Barat / Walima / Nikkah dates or specific ensembles you wish to try on..." class="w-full px-4 py-3 rounded-xl bg-white border border-espresso/15 text-sm focus:outline-none focus:border-goldDeep"></textarea>
+                        </div>
+
+                        <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <p class="text-[11px] text-muted">
+                                <i class="fa-solid fa-shield-halved text-goldDeep mr-1"></i>
+                                Location: <strong>Royal Residency, Emerald, Main Tariq Rd, Karachi</strong>
+                            </p>
+                            <div class="flex items-center gap-3">
+                                <button type="button" onclick="submitBookingDirectToWhatsApp()" class="px-5 py-3.5 rounded-full border border-emerald-700/40 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[10.5px] uppercase tracking-wider font-bold transition-all flex items-center gap-2">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600 text-base"></i>
+                                    <span>Send via WhatsApp</span>
+                                </button>
+                                <button type="submit" class="btn-pill-video text-[11px] uppercase tracking-[0.2em] font-semibold px-8 py-4 rounded-full shadow-pill shrink-0">
+                                    Confirm Slot
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        </div> <!-- End view-atelier -->
+
+        <!-- ================= VIEW 2: DEDICATED CATALOG GALLERY ARCHIVE (WITH CONTINUOUS 3D BACKGROUND) ================= -->
+        <div id="view-catalog" class="hidden pb-12">
+            
+            <!-- Catalog Header Banner -->
+            <section class="max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12 my-8">
+                <div class="interactive-surface editorial-accent-card rounded-3xl p-8 sm:p-14 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                    <div class="max-w-2xl space-y-3">
+                        <div class="inline-flex items-center gap-2">
+                            <span class="w-8 h-[1px] bg-goldDeep"></span>
+                            <span class="text-[10px] uppercase tracking-[0.3em] font-cinzel font-bold text-goldDeep">
+                                Complete Atelier Archive
+                            </span>
+                        </div>
+                        <h1 class="font-display text-4xl sm:text-6xl text-espresso font-normal leading-tight">
+                            Couture Catalog Gallery
+                        </h1>
+                        <p class="text-xs sm:text-sm text-muted leading-relaxed font-normal">
+                            Handcrafted Pakistani bridal lehengas, Nikkah kalidaars, Walima pastels, and bespoke groom sherwanis. Every creation is loomed on wooden addas with pure 9000 micro-velvet, metallic silk tissues, and authentic 24K Zardozi at <strong>Royal Residency, Emerald, Main Tariq Rd, Karachi</strong>.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+                        <button onclick="switchView('atelier')" class="px-6 py-3.5 rounded-full border border-espresso/20 hover:border-espresso text-espresso text-[11px] uppercase tracking-wider font-semibold text-center bg-white/70 cursor-pointer">
+                            ← Back to 3D Atelier
+                        </button>
+                        <button onclick="inquireOnWhatsApp('Catalog Header Inquiry: Hello Zeeshan Danish Couture, I am reviewing your complete atelier archive and would like to inquire about bespoke bridal orders and appointments at Royal Residency, Emerald, Main Tariq Rd.')" class="px-6 py-3.5 rounded-full border border-emerald-700/40 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 text-[11px] uppercase tracking-wider font-bold transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+                            <i class="fa-brands fa-whatsapp text-emerald-600 text-base"></i>
+                            <span>Inquire via WhatsApp</span>
+                        </button>
+                        <button onclick="switchView('atelier'); setTimeout(() => document.getElementById('tariq-rd-atelier').scrollIntoView({behavior:'smooth'}), 120)" class="btn-pill-video text-[11px] uppercase tracking-wider font-semibold px-7 py-3.5 rounded-full text-center shadow-pill cursor-pointer">
+                            Book Private Fitting
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filter Controls & Search Bar -->
+            <section class="max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12 mb-10">
+                <div class="interactive-surface flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-espresso/10">
+                    
+                    <!-- Category Tabs -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterCatalog('all')" data-cat="all" class="cat-pill px-5 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-semibold transition-all bg-espresso text-white shadow cursor-pointer">
+                            All Pieces (<span id="count-all">12</span>)
+                        </button>
+                        <button onclick="filterCatalog('bridal')" data-cat="bridal" class="cat-pill px-5 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-semibold transition-all bg-white/80 border border-espresso/10 text-muted hover:text-espresso cursor-pointer">
+                            Bridal Lehengas
+                        </button>
+                        <button onclick="filterCatalog('walima')" data-cat="walima" class="cat-pill px-5 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-semibold transition-all bg-white/80 border border-espresso/10 text-muted hover:text-espresso cursor-pointer">
+                            Walima &amp; Nikkah
+                        </button>
+                        <button onclick="filterCatalog('velvet')" data-cat="velvet" class="cat-pill px-5 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-semibold transition-all bg-white/80 border border-espresso/10 text-muted hover:text-espresso cursor-pointer">
+                            Velvet Formals
+                        </button>
+                        <button onclick="filterCatalog('sherwani')" data-cat="sherwani" class="cat-pill px-5 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-semibold transition-all bg-white/80 border border-espresso/10 text-muted hover:text-espresso cursor-pointer">
+                            Groom Sherwanis
+                        </button>
+                    </div>
+
+                    <!-- Sort & In-Page Filter -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="relative">
+                            <input type="text" id="catalog-inline-search" oninput="applyInlineSearch(this.value)" placeholder="Search by name, fabric, kora..." class="px-4 py-2.5 pl-9 rounded-full bg-white border border-espresso/15 text-xs text-espresso focus:outline-none focus:border-goldDeep w-56 sm:w-64">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-xs"></i>
+                        </div>
+
+                        <select id="catalog-sort" onchange="sortCatalog(this.value)" class="px-4 py-2.5 rounded-full bg-white border border-espresso/15 text-xs text-espresso font-semibold focus:outline-none focus:border-goldDeep cursor-pointer">
+                            <option value="curated">Sort: Curated Priority</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="hours-desc">Karigar Hours (Most Intricate)</option>
+                        </select>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Full Gallery Grid (Interactive Surface with Translucent Editorial Glass Cards) -->
+            <section class="max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12 mb-20">
+                <div id="full-catalog-grid" class="interactive-surface grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </section>
+
+            <!-- Studio Appointment Invitation Banner -->
+            <section class="max-w-[1540px] mx-auto px-5 sm:px-8 lg:px-12 mb-16">
+                <div class="interactive-surface rounded-3xl bg-espresso/90 backdrop-blur-md text-studioLight p-8 sm:p-14 flex flex-col lg:flex-row items-center justify-between gap-8 border border-gold/40">
+                    <div class="space-y-3 max-w-xl text-center lg:text-left">
+                        <span class="text-[10px] uppercase tracking-[0.3em] font-cinzel text-goldBright block">
+                            Main Tariq Road Flagship Bridal Lounge
+                        </span>
+                        <h2 class="font-serif text-3xl sm:text-5xl text-white font-normal leading-tight">
+                            Experience the Ensembles in Person
+                        </h2>
+                        <p class="text-xs sm:text-sm text-studioLight/75 leading-relaxed">
+                            Reserve a one-on-one private fitting at <strong>Royal Residency, Emerald, Main Tariq Rd, Karachi</strong> with complimentary VIP valet parking and senior couture stylists.
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center gap-4 shrink-0">
+                        <button onclick="inquireOnWhatsApp('Studio Lounge Inquiry: Hello Zeeshan Danish Couture, I would like to arrange an appointment with a senior stylist at Royal Residency, Emerald, Main Tariq Rd, Karachi.')" class="px-6 py-4 rounded-full border border-emerald-500/50 bg-[#25D366]/20 hover:bg-[#25D366]/30 text-emerald-300 text-xs uppercase tracking-wider font-bold transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i>
+                            <span>WhatsApp Concierge</span>
+                        </button>
+                        <button onclick="switchView('atelier')" class="px-6 py-4 rounded-full border border-white/20 hover:border-white text-white text-xs uppercase tracking-wider font-semibold transition-colors cursor-pointer">
+                            Launch Live 3D Studio
+                        </button>
+                        <button onclick="switchView('atelier'); setTimeout(() => document.getElementById('tariq-rd-atelier').scrollIntoView({behavior:'smooth'}), 120)" class="btn-pill-video text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full shadow-pill cursor-pointer">
+                            Reserve Studio Appointment
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </div> <!-- End view-catalog -->
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="interactive-surface bg-espresso/95 backdrop-blur-md text-studioLight pt-16 pb-20 border-t border-gold/30">
+            <div class="max-w-[1540px] mx-auto px-6 lg:px-12">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+                    <div class="md:col-span-5 space-y-3">
+                        <span class="font-cinzel text-2xl text-white font-bold tracking-widest block">ZEESHAN DANISH</span>
+                        <span class="text-[9px] uppercase tracking-[0.42em] text-goldBright block">COUTURE • KARACHI</span>
+                        <p class="text-xs text-studioLight/70 max-w-sm leading-relaxed pt-2">
+                            Handcrafted Pakistani bridal couture, Nikkah pishwas, Walima gowns, and bespoke groom sherwanis at Royal Residency, Emerald, Main Tariq Rd, Karachi.
+                        </p>
+                    </div>
+
+                    <div class="md:col-span-3 space-y-2 text-xs">
+                        <span class="text-[10px] uppercase tracking-[0.25em] text-goldBright font-semibold block mb-3 font-cinzel">Quick Navigation</span>
+                        <a href="#section-hero" class="block text-studioLight/75 hover:text-white">Editorial Look</a>
+                        <a href="#section-heritage" class="block text-studioLight/75 hover:text-white">24K Zardozi Craft</a>
+                        <a href="#pick-and-drape" class="block text-studioLight/75 hover:text-white">Live 3D Customizer</a>
+                        <a href="catalog.html" class="block text-goldBright hover:text-white font-medium">Catalog Gallery Archive</a>
+                        <a href="#tariq-rd-atelier" class="block text-studioLight/75 hover:text-white">Tariq Rd Booking</a>
+                    </div>
+
+                    <div class="md:col-span-4 space-y-2 text-xs">
+                        <span class="text-[10px] uppercase tracking-[0.25em] text-goldBright font-semibold block mb-3 font-cinzel">Flagship Studio &amp; WhatsApp</span>
+                        <p class="text-white font-semibold">Zeeshan Danish Couture</p>
+                        <p class="text-studioLight/75 leading-relaxed">
+                            Royal Residency, Emerald,<br>
+                            Main Tariq Rd, Karachi, Pakistan
+                        </p>
+                        <button onclick="inquireOnWhatsApp('Hello Zeeshan Danish Couture, I am reaching out through your footer concierge to inquire about a bridal consultation.')" class="mt-2 text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1.5 text-xs font-semibold">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            <span>WhatsApp: +92 300 1234567</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-studioLight/50 gap-4">
+                    <p>© 2026 Zeeshan Danish Couture. All Rights Reserved.</p>
+                    <p>Royal Residency, Emerald, Main Tariq Rd, Karachi</p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- ================= PERSISTENT FLOATING BOTTOM-RIGHT WHATSAPP CONCIERGE BUTTON ================= -->
+    <div class="fixed bottom-6 right-6 z-40 flex items-center gap-3">
+        <span class="hidden md:inline-block px-3 py-1.5 rounded-full bg-espresso/90 text-white text-[10px] font-semibold tracking-wider shadow-lg backdrop-blur-xs border border-white/10">
+            Chat on Tariq Rd WhatsApp
+        </span>
+        <button onclick="inquireOnWhatsApp('Global Concierge: Hello Zeeshan Danish Couture, I am exploring your 3D Bridal Atelier and would like assistance with bespoke bridal customization and appointment slots at Royal Residency, Emerald, Main Tariq Rd.')" aria-label="Instant WhatsApp Concierge" class="w-14 h-14 rounded-full bg-[#25D366] text-white shadow-wa border-2 border-white flex items-center justify-center hover:scale-110 hover:bg-[#20ba59] transition-all group" title="Instant WhatsApp & Tariq Rd Studio Concierge">
+            <i class="fa-brands fa-whatsapp text-2xl group-hover:scale-110 transition-transform"></i>
+        </button>
+    </div>
+
+    <!-- Couture Drawer (Wishlist / Bag) -->
+    <div id="atelier-drawer" class="fixed inset-0 z-50 hidden bg-espresso/40 backdrop-blur-xs flex justify-end">
+        <div class="w-full max-w-md bg-studioLight h-full shadow-2xl p-6 sm:p-8 flex flex-col justify-between overflow-y-auto">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-espresso/10">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-[0.24em] text-goldDeep font-semibold font-cinzel">Zeeshan Danish Couture</span>
+                        <h3 id="drawer-title" class="font-serif text-2xl text-espresso font-bold">Couture Fitting Bag</h3>
+                    </div>
+                    <button onclick="closeAtelierDrawer()" class="w-8 h-8 rounded-full bg-studioWarm flex items-center justify-center hover:bg-espresso hover:text-white transition-colors">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+                <div id="drawer-items-container" class="mt-6 space-y-4 max-h-[62vh] overflow-y-auto pr-1"></div>
+            </div>
+            <div class="border-t border-espresso/10 pt-5 space-y-3">
+                <div class="flex items-center justify-between text-xs text-muted">
+                    <span>Fitting Studio</span>
+                    <span class="text-espresso font-semibold">Royal Residency, Emerald, Tariq Rd</span>
+                </div>
+                <button onclick="inquireDrawerOnWhatsApp()" class="w-full py-3.5 rounded-full border border-emerald-700/40 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs uppercase tracking-wider font-bold transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-base"></i>
+                    <span>Inquire Bag Items on WhatsApp</span>
+                </button>
+                <a href="#tariq-rd-atelier" onclick="closeAtelierDrawer()" class="block text-center w-full btn-pill-video text-xs uppercase tracking-[0.18em] font-semibold py-4 rounded-full">
+                    Book Private Fitting for Selection
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Atelier Quick View & Concierge Modal -->
+    <div id="atelier-modal" class="fixed inset-0 z-50 hidden bg-espresso/50 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="relative w-full max-w-lg bg-studioLight rounded-3xl border border-espresso/15 shadow-2xl p-6 sm:p-8">
+            <button onclick="closeAtelierModal()" aria-label="Close Modal" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-studioWarm hover:bg-espresso hover:text-white transition-colors flex items-center justify-center text-espresso">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div id="atelier-modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div id="search-modal" class="fixed inset-0 z-50 hidden bg-studioLight/95 backdrop-blur-xl flex flex-col items-center justify-start pt-24 px-6">
+        <button onclick="toggleSearchModal()" aria-label="Close Search" class="absolute top-8 right-8 w-11 h-11 rounded-full border border-espresso/20 flex items-center justify-center hover:bg-espresso hover:text-white transition-colors">
+            <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+        <div class="max-w-2xl w-full">
+            <span class="text-[10.5px] uppercase tracking-[0.28em] text-goldDeep font-semibold font-cinzel">Search Zeeshan Danish Couture Archive</span>
+            <div class="relative mt-2">
+                <input type="text" id="archive-search-input" oninput="executeArchiveSearch(this.value)" placeholder="Search Crimson Lehenga, Walima Gown, Sherwani, Zardozi..." class="w-full bg-transparent border-b-2 border-espresso py-3 pr-10 font-serif text-2xl sm:text-3xl text-espresso focus:outline-none focus:border-goldDeep">
+            </div>
+            <div id="archive-search-results" class="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+    </div>
+
+    <!-- ================= ULTRA-REALISTIC 4K PBR SCROLL-DRIVEN BRIDAL COUTURE ENGINE ================= -->
+    <script>
+        const ATELIER_WHATSAPP_PHONE = "923001234567";
+
+        function inquireOnWhatsApp(message) {
+            const url = `https://wa.me/${ATELIER_WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        let scene, camera, renderer;
+        let masterGroup;
+
+        // 3D Couture Groups & Meshes
+        let podiumGroup;
+        let mannequinBustMesh, choliBodiceMesh, choliSleevesGroup;
+        let kaliPanels = [];
+        let zardoziSkirtOverlayMesh;
+        let dupattaArchMesh, dupattaBorderWire;
+        let zardoziGroup, zardoziBorders = [], zardoziVineMeshes = [], kundanSparkleSystem;
+        let raniHaarJewelryGroup;
+        let royalHaloGroup, royalCrestDiscMesh, crownKalgiGroup;
+
+        // Live PBR Materials
+        let bridalFabricMaterial;
+        let choliFabricMaterial;
+        let zardoziOverlayMaterial;
+        let dupattaSheerMaterial;
+        let zardoziGoldMaterial;
+        let rubyJewelMaterial;
+
+        // Scroll Progress State
+        let targetScrollProgress = 0.0;
+        let currentScrollProgress = 0.0;
+        let cameraFocusOverride = null;
+        let lastFrameTime = performance.now();
+
+        // 360° Drag Orbit
+        let isDragging = false;
+        let prevPointerX = 0;
+        let userDragAngleY = 0;
+        let pointerOffsetX = 0;
+        let pointerOffsetY = 0;
+        let smoothRotY = 0;
+        let smoothRotX = 0.04;
+        let smoothStageX = 0.52;
+
+        function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+        function lerp(a, b, t) { return a + (b - a) * t; }
+        function smoothstep(e0, e1, x) {
+            const t = clamp((x - e0) / (e1 - e0), 0, 1);
+            return t * t * (3 - 2 * t);
+        }
+
+        // Procedural Textures
+        function createTailorLinenTexture() {
+            const c = document.createElement('canvas');
+            c.width = 1024; c.height = 1024;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#E5D8C1'; ctx.fillRect(0, 0, 1024, 1024);
+
+            ctx.strokeStyle = 'rgba(130, 108, 78, 0.14)'; ctx.lineWidth = 1;
+            for (let i = 0; i < 1024; i += 6) {
+                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 1024); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(1024, i); ctx.stroke();
+            }
+
+            ctx.strokeStyle = 'rgba(28, 22, 18, 0.55)'; ctx.lineWidth = 3;
+            ctx.setLineDash([10, 6]);
+            for (let x = 128; x < 1024; x += 256) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1024); ctx.stroke();
+            }
+
+            ctx.setLineDash([]);
+            ctx.strokeStyle = '#1A1412'; ctx.lineWidth = 4;
+            ctx.strokeRect(0, 440, 1024, 12);
+            ctx.strokeRect(0, 740, 1024, 14);
+
+            ctx.fillStyle = 'rgba(26, 20, 18, 0.65)';
+            ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('ZD ATELIER • BESPOKE FORM 36', 512, 390);
+
+            const tex = new THREE.CanvasTexture(c);
+            tex.wrapS = THREE.RepeatWrapping;
+            tex.wrapT = THREE.ClampToEdgeWrapping;
+            return tex;
+        }
+
+        function createVelvetBrocadeBumpMap() {
+            const c = document.createElement('canvas');
+            c.width = 1024; c.height = 1024;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#787878'; ctx.fillRect(0, 0, 1024, 1024);
+
+            for (let x = 0; x < 1024; x += 8) {
+                const shade = 120 + Math.sin((x / 1024) * Math.PI * 48) * 35;
+                ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
+                ctx.fillRect(x, 0, 6, 1024);
+            }
+
+            ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 4;
+            for (let x = 32; x < 1024; x += 64) {
+                ctx.beginPath();
+                ctx.arc(x, 180, 26, Math.PI, 0, false);
+                ctx.lineTo(x + 26, 260); ctx.lineTo(x - 26, 260); ctx.closePath(); ctx.stroke();
+
+                for (let y = 320; y < 900; y += 110) {
+                    ctx.beginPath(); ctx.arc(x, y, 14, 0, Math.PI * 2); ctx.stroke();
+                    ctx.fillStyle = '#FAFAFA'; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
+                }
+            }
+
+            const tex = new THREE.CanvasTexture(c);
+            tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
+            tex.repeat.set(3, 1);
+            return tex;
+        }
+
+        function createZardoziEmbroideryAlphaTexture() {
+            const c = document.createElement('canvas');
+            c.width = 1024; c.height = 1024;
+            const ctx = c.getContext('2d');
+            ctx.clearRect(0, 0, 1024, 1024);
+
+            const borderGrad = ctx.createLinearGradient(0, 580, 0, 1024);
+            borderGrad.addColorStop(0, 'rgba(231, 201, 139, 0)');
+            borderGrad.addColorStop(0.3, 'rgba(231, 201, 139, 0.55)');
+            borderGrad.addColorStop(0.85, 'rgba(255, 232, 175, 0.96)');
+            borderGrad.addColorStop(1, 'rgba(231, 201, 139, 1)');
+
+            ctx.strokeStyle = '#FFE6A8'; ctx.fillStyle = borderGrad;
+
+            for (let x = 32; x < 1024; x += 64) {
+                ctx.lineWidth = 3.5;
+                ctx.beginPath();
+                ctx.moveTo(x - 28, 980); ctx.lineTo(x - 28, 760);
+                ctx.quadraticCurveTo(x, 690, x + 28, 760); ctx.lineTo(x + 28, 980);
+                ctx.closePath(); ctx.fill(); ctx.stroke();
+
+                ctx.beginPath(); ctx.arc(x, 845, 14, 0, Math.PI * 2); ctx.stroke();
+
+                ctx.lineWidth = 2.2;
+                ctx.beginPath(); ctx.moveTo(x, 700); ctx.lineTo(x, 60); ctx.stroke();
+
+                for (let y = 140; y < 660; y += 85) {
+                    ctx.fillStyle = '#FFF3C4'; ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
+                    ctx.strokeStyle = '#E7C98B'; ctx.beginPath(); ctx.arc(x, y, 15, 0, Math.PI * 2); ctx.stroke();
+                }
+            }
+
+            ctx.fillStyle = '#FFE6A3';
+            ctx.fillRect(0, 960, 1024, 18); ctx.fillRect(0, 990, 1024, 24);
+
+            const tex = new THREE.CanvasTexture(c);
+            tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.ClampToEdgeWrapping;
+            tex.repeat.set(4, 1);
+            return tex;
+        }
+
+        function createRoyalFiligreeCrestTexture() {
+            const c = document.createElement('canvas');
+            c.width = 1024; c.height = 1024;
+            const ctx = c.getContext('2d');
+            ctx.clearRect(0, 0, 1024, 1024);
+            const cx = 512, cy = 512;
+
+            const glow = ctx.createRadialGradient(cx, cy, 70, cx, cy, 490);
+            glow.addColorStop(0, 'rgba(231, 201, 139, 0.28)');
+            glow.addColorStop(0.65, 'rgba(184, 145, 70, 0.14)');
+            glow.addColorStop(1, 'rgba(184, 145, 70, 0)');
+            ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(cx, cy, 490, 0, Math.PI * 2); ctx.fill();
+
+            ctx.strokeStyle = '#E7C98B'; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(cx, cy, 438, 0, Math.PI * 2); ctx.stroke();
+
+            for (let i = 0; i < 48; i++) {
+                const a = (i / 48) * Math.PI * 2;
+                ctx.beginPath();
+                ctx.moveTo(cx + Math.cos(a) * 345, cy + Math.sin(a) * 345);
+                ctx.lineTo(cx + Math.cos(a) * 432, cy + Math.sin(a) * 432);
+                ctx.strokeStyle = 'rgba(231, 201, 139, 0.6)'; ctx.lineWidth = 2.5; ctx.stroke();
+            }
+
+            ctx.beginPath(); ctx.arc(cx, cy, 345, 0, Math.PI * 2);
+            ctx.lineWidth = 4; ctx.strokeStyle = '#D4AF6A'; ctx.stroke();
+
+            ctx.fillStyle = '#FFFDF9';
+            ctx.font = '600 28px "Plus Jakarta Sans", sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText('ZEESHAN DANISH COUTURE', cx, cy - 292);
+
+            ctx.fillStyle = '#E7C98B';
+            ctx.font = '600 22px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('ROYAL RESIDENCY • MAIN TARIQ RD', cx, cy + 316);
+
+            ctx.font = 'italic 64px "Cormorant Garamond", Georgia, serif';
+            ctx.fillStyle = 'rgba(231, 201, 139, 0.36)';
+            ctx.fillText('ZD Bridal Atelier', cx, cy - 175);
+
+            const tex = new THREE.CanvasTexture(c);
+            tex.anisotropy = 8;
+            return tex;
+        }
+
+        function createContactShadowTexture() {
+            const sc = document.createElement('canvas');
+            sc.width = 512; sc.height = 512;
+            const ctx = sc.getContext('2d');
+            const grad = ctx.createRadialGradient(256, 256, 25, 256, 256, 245);
+            grad.addColorStop(0, 'rgba(26, 20, 18, 0.48)');
+            grad.addColorStop(0.5, 'rgba(26, 20, 18, 0.19)');
+            grad.addColorStop(0.8, 'rgba(26, 20, 18, 0.04)');
+            grad.addColorStop(1, 'rgba(26, 20, 18, 0)');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, 512, 512);
+            return new THREE.CanvasTexture(sc);
+        }
+
+        function initCoutureWebGL() {
+            const canvas = document.getElementById('couture-webgl-canvas');
+            scene = new THREE.Scene();
+
+            const w = window.innerWidth || 1280;
+            const h = window.innerHeight || 800;
+
+            camera = new THREE.PerspectiveCamera(32, w / h, 0.1, 100);
+            camera.position.set(0, 0.45, 8.2);
+            camera.lookAt(0, 0.05, 0);
+
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true,
+                alpha: true,
+                powerPreference: 'high-performance'
+            });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setSize(w, h);
+            renderer.physicallyCorrectLights = true;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.25;
+
+            // Lights
+            scene.add(new THREE.AmbientLight(0xFFFBF2, 1.9));
+            const keyLight = new THREE.DirectionalLight(0xFFF6E5, 4.2);
+            keyLight.position.set(5.5, 8.5, 6.5); scene.add(keyLight);
+            const rimLight = new THREE.DirectionalLight(0xFFE09E, 3.6);
+            rimLight.position.set(-6, 5.5, -5); scene.add(rimLight);
+            const frontFillLight = new THREE.PointLight(0xE7C98B, 2.8, 15);
+            frontFillLight.position.set(0, 1.0, 4.2); scene.add(frontFillLight);
+
+            masterGroup = new THREE.Group();
+            masterGroup.position.y = -0.30;
+            scene.add(masterGroup);
+
+            zardoziGoldMaterial = new THREE.MeshStandardMaterial({
+                color: 0xE7C98B,
+                emissive: 0x422B05,
+                emissiveIntensity: 0.25,
+                metalness: 0.94,
+                roughness: 0.15
+            });
+
+            rubyJewelMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x9E0B22,
+                emissive: 0x38020A,
+                emissiveIntensity: 0.35,
+                metalness: 0.1,
+                roughness: 0.08,
+                transmission: 0.65,
+                transparent: true
+            });
+
+            // Podium
+            podiumGroup = new THREE.Group();
+            masterGroup.add(podiumGroup);
+
+            const shadowPlane = new THREE.Mesh(
+                new THREE.PlaneGeometry(6.2, 6.2),
+                new THREE.MeshBasicMaterial({ map: createContactShadowTexture(), transparent: true, depthWrite: false })
+            );
+            shadowPlane.rotation.x = -Math.PI / 2;
+            shadowPlane.position.y = -1.56;
+            podiumGroup.add(shadowPlane);
+
+            const marbleBase = new THREE.Mesh(
+                new THREE.CylinderGeometry(1.56, 1.66, 0.13, 64),
+                new THREE.MeshStandardMaterial({ color: 0xF3EDE2, metalness: 0.12, roughness: 0.22 })
+            );
+            marbleBase.position.y = -1.49;
+            podiumGroup.add(marbleBase);
+
+            const podiumRing = new THREE.Mesh(new THREE.TorusGeometry(1.60, 0.032, 16, 72), zardoziGoldMaterial);
+            podiumRing.rotation.x = Math.PI / 2;
+            podiumRing.position.y = -1.45;
+            podiumGroup.add(podiumRing);
+
+            const standPillar = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.095, 2.88, 28), zardoziGoldMaterial);
+            standPillar.position.y = -0.02;
+            podiumGroup.add(standPillar);
+
+            // Linen Mannequin
+            const mannequinPoints = [
+                new THREE.Vector2(0.01, 0.02), new THREE.Vector2(0.245, 0.10),
+                new THREE.Vector2(0.31, 0.34), new THREE.Vector2(0.455, 0.64),
+                new THREE.Vector2(0.415, 0.87), new THREE.Vector2(0.155, 0.99),
+                new THREE.Vector2(0.135, 1.20), new THREE.Vector2(0.01, 1.23)
+            ];
+            const linenTex = createTailorLinenTexture();
+            mannequinBustMesh = new THREE.Mesh(
+                new THREE.LatheGeometry(mannequinPoints, 56),
+                new THREE.MeshStandardMaterial({ map: linenTex, bumpMap: linenTex, bumpScale: 0.008, roughness: 0.72, metalness: 0.05 })
+            );
+            mannequinBustMesh.position.y = 0.02;
+            masterGroup.add(mannequinBustMesh);
+
+            const neckCap = new THREE.Mesh(new THREE.CylinderGeometry(0.142, 0.145, 0.05, 32), zardoziGoldMaterial);
+            neckCap.position.y = 1.24;
+            masterGroup.add(neckCap);
+
+            // Fabrics & Choli
+            const velvetBumpTex = createVelvetBrocadeBumpMap();
+            bridalFabricMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x6B0918,
+                emissive: 0x240207,
+                emissiveIntensity: 0.25,
+                metalness: 0.16,
+                roughness: 0.46,
+                clearcoat: 0.18,
+                bumpMap: velvetBumpTex,
+                bumpScale: 0.032,
+                side: THREE.DoubleSide
+            });
+
+            choliFabricMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x6B0918,
+                emissive: 0x240207,
+                emissiveIntensity: 0.25,
+                metalness: 0.22,
+                roughness: 0.38,
+                clearcoat: 0.22,
+                bumpMap: velvetBumpTex,
+                bumpScale: 0.024,
+                transparent: true,
+                opacity: 0.0
+            });
+
+            const choliPoints = [
+                new THREE.Vector2(0.255, 0.11), new THREE.Vector2(0.335, 0.35),
+                new THREE.Vector2(0.472, 0.64), new THREE.Vector2(0.435, 0.85),
+                new THREE.Vector2(0.23, 0.92)
+            ];
+            choliBodiceMesh = new THREE.Mesh(new THREE.LatheGeometry(choliPoints, 56), choliFabricMaterial);
+            choliBodiceMesh.position.y = 0.02;
+            masterGroup.add(choliBodiceMesh);
+
+            choliSleevesGroup = new THREE.Group();
+            [-1, 1].forEach(dir => {
+                const sleeveMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.11, 0.34, 24, 1, true), choliFabricMaterial);
+                sleeveMesh.position.set(dir * 0.44, 0.72, 0);
+                sleeveMesh.rotation.z = dir * 0.48;
+                const cuffRing = new THREE.Mesh(new THREE.TorusGeometry(0.112, 0.012, 12, 28), zardoziGoldMaterial);
+                cuffRing.rotation.x = Math.PI / 2; cuffRing.position.y = -0.16;
+                sleeveMesh.add(cuffRing);
+                choliSleevesGroup.add(sleeveMesh);
+            });
+            masterGroup.add(choliSleevesGroup);
+
+            // 24 Pleated Kaliyan
+            const numKaliyan = 24;
+            const kaliArc = (Math.PI * 2) / numKaliyan;
+            for (let i = 0; i < numKaliyan; i++) {
+                const geo = new THREE.BufferGeometry();
+                const positions = [], uvs = [], indices = [];
+                for (let yStep = 0; yStep <= 28; yStep++) {
+                    const v = yStep / 28;
+                    const y = 0.14 - v * 1.57;
+                    const baseR = 0.26 + Math.pow(v, 1.18) * 1.22;
+                    for (let aStep = 0; aStep <= 12; aStep++) {
+                        const u = aStep / 12;
+                        const theta = u * kaliArc * 1.04;
+                        const pleatDepth = Math.sin(u * Math.PI) * (0.015 + v * 0.068);
+                        const r = baseR + pleatDepth;
+                        positions.push(Math.cos(theta) * r, y, Math.sin(theta) * r);
+                        uvs.push(u, 1 - v);
+                    }
+                }
+                for (let yStep = 0; yStep < 28; yStep++) {
+                    for (let aStep = 0; aStep < 12; aStep++) {
+                        const a = yStep * 13 + aStep;
+                        const b = a + 13;
+                        indices.push(a, b, a + 1); indices.push(b, b + 1, a + 1);
+                    }
+                }
+                geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+                geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+                geo.setIndex(indices);
+                geo.computeVertexNormals();
+
+                const kaliMesh = new THREE.Mesh(geo, bridalFabricMaterial);
+                const seamPts = [];
+                for (let s = 0; s <= 12; s++) {
+                    const sv = s / 12;
+                    seamPts.push(new THREE.Vector3(0.26 + Math.pow(sv, 1.18) * 1.22 + 0.008, 0.14 - sv * 1.57, 0));
+                }
+                const seamTube = new THREE.Mesh(
+                    new THREE.TubeGeometry(new THREE.CatmullRomCurve3(seamPts), 20, 0.0065, 6, false),
+                    zardoziGoldMaterial
+                );
+                kaliMesh.add(seamTube);
+
+                const kaliPivot = new THREE.Group();
+                kaliPivot.add(kaliMesh);
+                masterGroup.add(kaliPivot);
+
+                kaliPanels.push({ pivot: kaliPivot, mesh: kaliMesh, seam: seamTube, baseAngle: i * kaliArc, index: i });
+            }
+
+            // Daman Overlay
+            const overlayLathePts = [];
+            for (let s = 0; s <= 24; s++) {
+                const sv = s / 24;
+                overlayLathePts.push(new THREE.Vector2(0.26 + Math.pow(sv, 1.18) * 1.22 + 0.055, 0.14 - sv * 1.57));
+            }
+            const zAlphaTex = createZardoziEmbroideryAlphaTexture();
+            zardoziOverlayMaterial = new THREE.MeshStandardMaterial({
+                color: 0xFFE5A3,
+                emissive: 0x6E4B11,
+                emissiveIntensity: 0.42,
+                metalness: 0.92,
+                roughness: 0.18,
+                map: zAlphaTex, alphaMap: zAlphaTex,
+                transparent: true, opacity: 0.0,
+                side: THREE.DoubleSide, depthWrite: false
+            });
+            zardoziSkirtOverlayMesh = new THREE.Mesh(new THREE.LatheGeometry(overlayLathePts, 72), zardoziOverlayMaterial);
+            masterGroup.add(zardoziSkirtOverlayMesh);
+
+            // Dupatta
+            const dupattaCurvePts = [
+                new THREE.Vector3(-1.38, -1.20, 0.52), new THREE.Vector3(-1.08, -0.28, 0.65),
+                new THREE.Vector3(-0.52, 0.80, 0.25), new THREE.Vector3(0.0, 0.46, -0.64),
+                new THREE.Vector3(0.52, 0.80, 0.25), new THREE.Vector3(1.10, -0.20, 0.58),
+                new THREE.Vector3(1.40, -1.16, 0.42)
+            ];
+            const dupattaCurve = new THREE.CatmullRomCurve3(dupattaCurvePts);
+            const dupattaGeo = new THREE.TubeGeometry(dupattaCurve, 80, 0.19, 18, false);
+            dupattaGeo.scale(1.0, 1.0, 0.34);
+            dupattaSheerMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xF7E4C3, emissive: 0x3D2508, emissiveIntensity: 0.16,
+                metalness: 0.25, roughness: 0.16, transmission: 0.75, transparent: true, opacity: 0.0, side: THREE.DoubleSide
+            });
+            dupattaArchMesh = new THREE.Mesh(dupattaGeo, dupattaSheerMaterial);
+            masterGroup.add(dupattaArchMesh);
+
+            dupattaBorderWire = new THREE.Mesh(new THREE.TubeGeometry(dupattaCurve, 80, 0.022, 8, false), zardoziGoldMaterial);
+            dupattaBorderWire.position.y = 0.095;
+            dupattaArchMesh.add(dupattaBorderWire);
+
+            // Zardozi Borders & Crystals
+            zardoziGroup = new THREE.Group();
+            masterGroup.add(zardoziGroup);
+
+            const kamarbandMesh = new THREE.Mesh(new THREE.TorusGeometry(0.285, 0.030, 16, 56), zardoziGoldMaterial);
+            kamarbandMesh.rotation.x = Math.PI / 2; kamarbandMesh.position.y = 0.15;
+            zardoziGroup.add(kamarbandMesh); zardoziBorders.push(kamarbandMesh);
+
+            [
+                { r: 1.52, y: -1.42, tube: 0.036 }, { r: 1.44, y: -1.28, tube: 0.024 },
+                { r: 1.35, y: -1.12, tube: 0.019 }, { r: 1.18, y: -0.85, tube: 0.015 }
+            ].forEach(b => {
+                const bMesh = new THREE.Mesh(new THREE.TorusGeometry(b.r, b.tube, 16, 72), zardoziGoldMaterial);
+                bMesh.rotation.x = Math.PI / 2; bMesh.position.y = b.y;
+                zardoziGroup.add(bMesh); zardoziBorders.push(bMesh);
+            });
+
+            for (let v = 0; v < 12; v++) {
+                const vAngleOffset = (v / 12) * Math.PI * 2;
+                const vinePts = [];
+                for (let step = 0; step <= 40; step++) {
+                    const t = step / 40;
+                    const y = -1.38 + t * 1.50;
+                    const rad = 0.26 + Math.pow(1 - t, 1.18) * 1.24 + 0.035;
+                    const theta = vAngleOffset + t * Math.PI * 1.2 + Math.sin(t * Math.PI * 5) * 0.10;
+                    vinePts.push(new THREE.Vector3(Math.cos(theta) * rad, y, Math.sin(theta) * rad));
+                }
+                const vineMesh = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(vinePts), 64, 0.012, 8, false), zardoziGoldMaterial);
+                zardoziGroup.add(vineMesh); zardoziVineMeshes.push(vineMesh);
+            }
+
+            const sparklePositions = new Float32Array(320 * 3);
+            const sparklePhases = [];
+            for (let i = 0; i < 320; i++) {
+                const t = Math.random(), angle = Math.random() * Math.PI * 2;
+                const rad = (1.52 * (1 - t * 0.72)) + (Math.random() - 0.5) * 0.22;
+                sparklePositions[i * 3] = Math.cos(angle) * rad;
+                sparklePositions[i * 3 + 1] = -1.42 + t * 2.55;
+                sparklePositions[i * 3 + 2] = Math.sin(angle) * rad;
+                sparklePhases.push({ angle, rad, y: -1.42 + t * 2.55, speed: 0.5 + Math.random() * 1.1 });
+            }
+            const sparkleGeo = new THREE.BufferGeometry();
+            sparkleGeo.setAttribute('position', new THREE.BufferAttribute(sparklePositions, 3));
+            kundanSparkleSystem = new THREE.Points(sparkleGeo, new THREE.PointsMaterial({ color: 0xFFF5CC, size: 0.052, transparent: true, opacity: 0.0 }));
+            kundanSparkleSystem.userData = { phases: sparklePhases };
+            zardoziGroup.add(kundanSparkleSystem);
+
+            // Rani Haar & Royal Crest
+            raniHaarJewelryGroup = new THREE.Group();
+            masterGroup.add(raniHaarJewelryGroup);
+            for (let n = 0; n < 3; n++) {
+                const r = 0.22 + n * 0.048;
+                const ring = new THREE.Mesh(new THREE.TorusGeometry(r, 0.013, 12, 48), zardoziGoldMaterial);
+                ring.rotation.x = Math.PI / 2 + 0.25; ring.position.set(0, 0.93 - n * 0.052, 0.055);
+                raniHaarJewelryGroup.add(ring);
+                for (let d = -4; d <= 4; d++) {
+                    const dropAngle = (d / 5) * 0.95 + Math.PI / 2;
+                    const dropGem = new THREE.Mesh(new THREE.OctahedronGeometry(0.018, 0), d % 2 === 0 ? rubyJewelMaterial : zardoziGoldMaterial);
+                    dropGem.position.set(Math.cos(dropAngle) * r, 0.91 - n * 0.055 - Math.sin(dropAngle) * 0.04, Math.sin(dropAngle) * r + 0.06);
+                    raniHaarJewelryGroup.add(dropGem);
+                }
+            }
+
+            royalHaloGroup = new THREE.Group();
+            masterGroup.add(royalHaloGroup);
+            royalCrestDiscMesh = new THREE.Mesh(
+                new THREE.PlaneGeometry(2.95, 2.95),
+                new THREE.MeshBasicMaterial({ map: createRoyalFiligreeCrestTexture(), transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false })
+            );
+            royalCrestDiscMesh.position.set(0, 0.54, -0.54);
+            royalHaloGroup.add(royalCrestDiscMesh);
+
+            const haloRing = new THREE.Mesh(new THREE.TorusGeometry(1.26, 0.024, 16, 80), zardoziGoldMaterial);
+            haloRing.position.set(0, 0.54, -0.52);
+            royalHaloGroup.add(haloRing);
+
+            crownKalgiGroup = new THREE.Group();
+            crownKalgiGroup.position.set(0, 1.34, 0);
+            const crownRing = new THREE.Mesh(new THREE.TorusGeometry(0.145, 0.020, 12, 36), zardoziGoldMaterial);
+            crownRing.rotation.x = Math.PI / 2; crownKalgiGroup.add(crownRing);
+            const crownJewel = new THREE.Mesh(new THREE.OctahedronGeometry(0.095, 1), rubyJewelMaterial);
+            crownJewel.position.y = 0.11; crownKalgiGroup.add(crownJewel);
+            royalHaloGroup.add(crownKalgiGroup);
+
+            // Drag Events
+            window.addEventListener('mousedown', (e) => {
+                if (e.target.closest('button, a, input, select, textarea')) return;
+                isDragging = true; prevPointerX = e.clientX;
+            });
+            window.addEventListener('mouseup', () => { isDragging = false; });
+            window.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    userDragAngleY += (e.clientX - prevPointerX) * 0.012;
+                    prevPointerX = e.clientX;
+                }
+                pointerOffsetX = (e.clientX / window.innerWidth) - 0.5;
+                pointerOffsetY = (e.clientY / window.innerHeight) - 0.5;
+            });
+
+            window.addEventListener('touchstart', (e) => {
+                if (e.target.closest('button, a, input, select, textarea')) return;
+                if (e.touches.length === 1) { isDragging = true; prevPointerX = e.touches[0].clientX; }
+            }, { passive: true });
+            window.addEventListener('touchend', () => { isDragging = false; });
+            window.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length === 1) {
+                    userDragAngleY += (e.touches[0].clientX - prevPointerX) * 0.012;
+                    prevPointerX = e.touches[0].clientX;
+                }
+            }, { passive: true });
+
+            window.addEventListener('resize', onWebGLResize);
+            window.addEventListener('scroll', updateScrollTargetFromWindow, { passive: true });
+            updateScrollTargetFromWindow();
+        }
+
+        function onWebGLResize() {
+            if (!renderer || !camera) return;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function updateScrollTargetFromWindow() {
+            const docEl = document.documentElement;
+            const maxScroll = Math.max(1, docEl.scrollHeight - window.innerHeight);
+            targetScrollProgress = clamp((window.scrollY || window.pageYOffset || 0) / maxScroll, 0.0, 1.0);
+        }
+
+        function setCameraFocusMode(mode) {
+            cameraFocusOverride = mode === 'full' ? null : mode;
+        }
+
+        function syncStageEditorialUI(p) {
+            const pctInt = Math.round(p * 100);
+            const navPct = document.getElementById('nav-scroll-pct');
+            if (navPct) navPct.textContent = `${pctInt}%`;
+
+            const drapePct = Math.min(100, Math.round(clamp(currentScrollProgress / 0.45, 0.12, 1) * 100));
+            const zardoziHrs = Math.round(smoothstep(0.35, 0.78, currentScrollProgress) * 580);
+            const kundanStat = currentScrollProgress > 0.72 ? "Rani Haar Set" : (currentScrollProgress > 0.40 ? "320 Crystals" : "Preparing");
+
+            const mDrape = document.getElementById('metric-drape');
+            const mZard = document.getElementById('metric-zardozi');
+            const mKund = document.getElementById('metric-kundan');
+            if (mDrape) mDrape.textContent = `${drapePct}% Draped`;
+            if (mZard) mZard.textContent = `${zardoziHrs} Hrs Woven`;
+            if (mKund) mKund.textContent = kundanStat;
+        }
+
+        function animateCoutureWebGL(now) {
+            requestAnimationFrame(animateCoutureWebGL);
+
+            const dt = Math.min((now - lastFrameTime) / 1000, 0.1);
+            lastFrameTime = now;
+
+            currentScrollProgress += (targetScrollProgress - currentScrollProgress) * 0.08;
+            const p = clamp(currentScrollProgress, 0.0, 1.0);
+            syncStageEditorialUI(p);
+
+            // Responsive Horizontal Positioning
+            const isDesktop = window.innerWidth >= 1024;
+            let desiredStageX = 0;
+            if (currentView === 'catalog') {
+                desiredStageX = isDesktop ? 1.45 : 0.0;
+            } else if (isDesktop) {
+                if (p < 0.24) {
+                    desiredStageX = 0.52;
+                } else if (p < 0.54) {
+                    desiredStageX = lerp(0.52, 1.50, smoothstep(0.24, 0.36, p));
+                } else if (p < 0.78) {
+                    desiredStageX = lerp(1.50, -1.50, smoothstep(0.54, 0.64, p));
+                } else {
+                    desiredStageX = lerp(-1.50, 0.0, smoothstep(0.78, 0.88, p));
+                }
+            }
+            smoothStageX += (desiredStageX - smoothStageX) * 0.065;
+            masterGroup.position.x = smoothStageX;
+
+            const effectiveP = currentView === 'catalog' ? clamp(0.78 + p * 0.22, 0.78, 1.0) : p;
+            const scrollTurnY = (currentView === 'catalog' ? (p * Math.PI * 1.5 + now * 0.0003) : (p * Math.PI * 2.2));
+            smoothRotY += (scrollTurnY + userDragAngleY + pointerOffsetX * 0.35 + Math.sin(now * 0.0005) * 0.08 - smoothRotY) * 0.085;
+            smoothRotX += (0.04 + pointerOffsetY * 0.12 - smoothRotX) * 0.085;
+            masterGroup.rotation.y = smoothRotY;
+            masterGroup.rotation.x = smoothRotX;
+
+            let targetCamZ = 8.1 - Math.sin(p * Math.PI) * 0.75;
+            let targetCamY = 0.42;
+            let lookAtY = 0.05;
+
+            if (cameraFocusOverride === 'daman') {
+                targetCamZ = 5.4; targetCamY = -0.65; lookAtY = -0.85;
+            } else if (cameraFocusOverride === 'jewelry') {
+                targetCamZ = 4.8; targetCamY = 0.85; lookAtY = 0.72;
+            }
+
+            camera.position.z += (targetCamZ - camera.position.z) * 0.07;
+            camera.position.y += (targetCamY - camera.position.y) * 0.07;
+            camera.lookAt(smoothStageX * 0.25, lookAtY, 0);
+
+            // Assembly Stages
+            kaliPanels.forEach((k) => {
+                const stagger = (k.index / 24) * 0.10;
+                const localLock = smoothstep(0.0 + stagger * 0.3, 0.25 + stagger * 0.2, effectiveP);
+                const unLocked = 1.0 - localLock;
+                k.pivot.rotation.y = k.baseAngle + unLocked * 1.35;
+                k.mesh.position.x = unLocked * (0.88 + (k.index % 3) * 0.20);
+                k.mesh.position.y = unLocked * (0.34 + Math.sin(now * 0.0028 + k.index * 0.5) * 0.12);
+                k.mesh.rotation.z = -unLocked * 0.38;
+                k.seam.visible = effectiveP > 0.08;
+            });
+
+            const choliProgress = smoothstep(0.12, 0.35, effectiveP);
+            choliFabricMaterial.opacity = choliProgress;
+            choliBodiceMesh.scale.setScalar(0.92 + choliProgress * 0.08);
+            choliSleevesGroup.visible = choliProgress > 0.05;
+            choliSleevesGroup.scale.setScalar(0.85 + choliProgress * 0.15);
+
+            const dupattaProgress = smoothstep(0.22, 0.48, effectiveP);
+            dupattaArchMesh.visible = dupattaProgress > 0.01;
+            dupattaSheerMaterial.opacity = dupattaProgress * 0.68;
+            dupattaArchMesh.position.y = (1.0 - dupattaProgress) * 0.60 + Math.sin(now * 0.002) * 0.02;
+            dupattaArchMesh.scale.setScalar(0.80 + dupattaProgress * 0.20);
+            dupattaBorderWire.visible = dupattaProgress > 0.15;
+
+            const zardoziWeave = smoothstep(0.48, 0.76, effectiveP);
+            zardoziSkirtOverlayMesh.visible = zardoziWeave > 0.01;
+            zardoziOverlayMaterial.opacity = zardoziWeave * 0.96;
+            zardoziGroup.visible = zardoziWeave > 0.01;
+
+            if (zardoziGroup.visible) {
+                zardoziBorders.forEach((b, idx) => {
+                    const bProg = clamp((zardoziWeave - idx * 0.08) / 0.65, 0, 1);
+                    b.scale.setScalar(0.75 + bProg * 0.25);
+                    b.visible = bProg > 0.02;
+                });
+                zardoziVineMeshes.forEach((v, idx) => {
+                    const vProg = clamp((zardoziWeave - (idx % 4) * 0.06) / 0.72, 0, 1);
+                    v.scale.set(1, Math.max(0.001, vProg), 1);
+                    v.position.y = -1.38 * (1 - vProg);
+                });
+                const posAttr = kundanSparkleSystem.geometry.attributes.position;
+                const phases = kundanSparkleSystem.userData.phases;
+                for (let i = 0; i < phases.length; i++) {
+                    const ph = phases[i];
+                    const a = ph.angle + now * 0.0007 * ph.speed + effectiveP * 2.0;
+                    const tightRadius = ph.rad * (1.28 - zardoziWeave * 0.28);
+                    posAttr.setXYZ(i, Math.cos(a) * tightRadius, ph.y + Math.sin(now * 0.003 + i) * 0.035, Math.sin(a) * tightRadius);
+                }
+                posAttr.needsUpdate = true;
+                kundanSparkleSystem.material.opacity = zardoziWeave * 0.92;
+            }
+
+            const royalReveal = smoothstep(0.74, 0.94, effectiveP);
+            raniHaarJewelryGroup.visible = royalReveal > 0.01;
+            raniHaarJewelryGroup.scale.setScalar(0.75 + royalReveal * 0.25);
+            royalHaloGroup.visible = royalReveal > 0.01;
+
+            if (royalHaloGroup.visible) {
+                royalCrestDiscMesh.material.opacity = royalReveal * 0.96;
+                royalCrestDiscMesh.rotation.z = now * 0.00025 + effectiveP * 1.2;
+                royalHaloGroup.scale.setScalar(0.72 + royalReveal * 0.28);
+                crownKalgiGroup.rotation.y = -now * 0.0012;
+                crownKalgiGroup.position.y = 1.26 + royalReveal * 0.08;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Bespoke Swatches
+        const bespokeSwatches = [
+            {
+                title: "Royal Sindhi Crimson Micro-Velvet",
+                price: "PKR 720,000", hours: "580 Master Hours", density: "24-Kali Heavy Ghera", event: "Royal Barat Bride",
+                tag: "24K Gold Zardozi, Kora, Dabka & Kundan", bg: "from-[#6B0918] via-[#3E040D] to-[#1D0105]",
+                fabricHex: 0x6B0918, emissiveHex: 0x240207, dupattaHex: 0xF7E4C3, zardoziHex: 0xE7C98B,
+                desc: "Deep sindoor crimson 9000 micro-velvet stretched on traditional wooden addas at our Main Tariq Road atelier. Hand-embroidered with Mughal architectural arches, 24K kora, dabka, and ruby Swarovski crystals."
+            },
+            {
+                title: "Nikkah Ivory & Champagne Tissue",
+                price: "PKR 540,000", hours: "460 Master Hours", density: "Pearl & Rose-Gold Kundan", event: "Serene Nikkah Bride",
+                tag: "Rose Gold Naqshi, Seed Pearls & Kundan", bg: "from-[#D5C7B2] via-[#B09B7C] to-[#786549]",
+                fabricHex: 0xEAE0D0, emissiveHex: 0x33291A, dupattaHex: 0xFFF9EE, zardoziHex: 0xE6C29F,
+                desc: "Luminous hand-loomed ivory and champagne metallic silk tissue, adorned with rose-gold kundan, seed pearl filigree, and scalloped Kiran borders for an unforgettable Nikkah ceremony."
+            },
+            {
+                title: "Emerald Maharani Raw Silk",
+                price: "PKR 485,000", hours: "410 Master Hours", density: "Antique Gold Tilla Jaal", event: "Regal Barat & Mehndi",
+                tag: "Antique Gold Tilla, Gota & Emerald Beads", bg: "from-[#0B382B] via-[#062119] to-[#02120D]",
+                fabricHex: 0x0B382B, emissiveHex: 0x031711, dupattaHex: 0xE8D39E, zardoziHex: 0xD4AF6A,
+                desc: "Pure Korean raw silk in jewel-toned Maharani emerald green, woven with heirloom antique gold tilla marori, chatta patti borders, and personalized bridal veil calligraphy."
+            },
+            {
+                title: "Walima Dusty Rose Organza",
+                price: "PKR 495,000", hours: "430 Master Hours", density: "Silver-Gold Sitara & Gota", event: "Luxury Walima Bride",
+                tag: "Silver-Gold Sitara, Cutdana & Gota Work", bg: "from-[#9E5A63] via-[#753B43] to-[#451D23]",
+                fabricHex: 0x9E5A63, emissiveHex: 0x2B0E13, dupattaHex: 0xF7D7DC, zardoziHex: 0xF2E2C4,
+                desc: "Ethereal dusty rose pure silk organza crafted for grand evening Walima receptions, featuring 3D crystal cutdana florals, silver-gold sitara work, and hand-worked tissue trims."
+            }
+        ];
+
+        let currentSwatchIndex = 0;
+        let currentSilhouetteCut = "24-Kali Lehenga";
+
+        function selectBespokeSwatch(idx) {
+            currentSwatchIndex = idx;
+            const s = bespokeSwatches[idx];
+
+            document.getElementById('customizer-title').textContent = s.title;
+            document.getElementById('customizer-price').textContent = s.price;
+            document.getElementById('customizer-hours').textContent = s.hours;
+            document.getElementById('customizer-density').textContent = s.density;
+            document.getElementById('customizer-event').textContent = s.event;
+            document.getElementById('customizer-embroidery-tag').textContent = s.tag;
+            document.getElementById('customizer-desc').textContent = s.desc;
+
+            const box = document.getElementById('customizer-preview-box');
+            box.className = `relative rounded-2xl bg-gradient-to-br ${s.bg} p-5 text-studioLight overflow-hidden transition-all duration-500 shadow-inner`;
+
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`swatch-btn-${i}`);
+                if (i === idx) {
+                    btn.className = "p-3 rounded-2xl border-2 border-espresso bg-studioWarm/90 text-left transition-all";
+                } else {
+                    btn.className = "p-3 rounded-2xl border border-espresso/10 bg-white/80 hover:bg-studioWarm/50 text-left transition-all";
+                }
+            }
+
+            if (bridalFabricMaterial && choliFabricMaterial && dupattaSheerMaterial && zardoziGoldMaterial) {
+                bridalFabricMaterial.color.setHex(s.fabricHex);
+                bridalFabricMaterial.emissive.setHex(s.emissiveHex);
+                choliFabricMaterial.color.setHex(s.fabricHex);
+                choliFabricMaterial.emissive.setHex(s.emissiveHex);
+                dupattaSheerMaterial.color.setHex(s.dupattaHex);
+                zardoziGoldMaterial.color.setHex(s.zardoziHex);
+            }
+        }
+
+        function setSilhouetteCut(btnEl, cutName) {
+            currentSilhouetteCut = cutName;
+            document.querySelectorAll('.cut-btn').forEach(b => {
+                b.className = "cut-btn py-2 px-2 rounded-xl border border-espresso/15 bg-white text-espresso text-[10px] font-semibold hover:border-espresso";
+            });
+            btnEl.className = "cut-btn py-2 px-2 rounded-xl border border-espresso bg-espresso text-white text-[10px] font-semibold";
+        }
+
+        function bookCustomDrapeFitting() {
+            const s = bespokeSwatches[currentSwatchIndex];
+            const notesEl = document.getElementById('client-notes');
+            if (notesEl) {
+                notesEl.value = `Custom 3D Bridal Selection: ${s.title} (${currentSilhouetteCut}) — Est. ${s.price}`;
+            }
+            document.getElementById('tariq-rd-atelier').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function inquireCustomSwatchOnWhatsApp() {
+            const s = bespokeSwatches[currentSwatchIndex];
+            const msg = `Custom 3D Atelier Selection: Hello Zeeshan Danish Couture, I customized the "${s.title}" in ${currentSilhouetteCut} cut (Est. ${s.price}, ${s.hours}). I would like to reserve a private trial and inspect the fabric swatches at Royal Residency, Emerald, Main Tariq Rd.`;
+            inquireOnWhatsApp(msg);
+        }
+
+        // ================= COMPLETE COUTURE ATELIER ARCHIVE (12 MASTERPIECES) =================
+        const fullCoutureArchive = [
+            {
+                id: 101,
+                title: "Shahjahan Sindoor Bridal Lehenga",
+                category: "bridal",
+                catName: "Bridal Lehengas",
+                price: "PKR 720,000",
+                priceNum: 720000,
+                hours: "580 Karigar Hours",
+                hoursNum: 580,
+                fabric: "Pure 9000 Micro-Velvet & Tissue Organza",
+                gradient: "from-[#631021] via-[#3F0813] to-[#210309]",
+                accent: "#E7C98B",
+                desc: "Hand-sculpted 24-kali crimson bridal lehenga heavily encrusted with 24K antique kora, dabka, kundan, and ruby Swarovski crystals. Paired with a double-drape tissue organza veil."
+            },
+            {
+                id: 102,
+                title: "Mumtaz Mahal Royal Crimson Gown",
+                category: "bridal",
+                catName: "Bridal Lehengas",
+                price: "PKR 680,000",
+                priceNum: 680000,
+                hours: "540 Karigar Hours",
+                hoursNum: 540,
+                fabric: "Sindhi Micro-Velvet & Metallic Silk",
+                gradient: "from-[#570C1B] via-[#3B0711] to-[#1C0308]",
+                accent: "#E7C98B",
+                desc: "Majestic floor-length barat gown with scalloped daman borders, zardozi mihrab arches, and hand-embroidered kiran dupatta finishes."
+            },
+            {
+                id: 103,
+                title: "Noor-e-Kashmir Ruby Velvet Lehenga",
+                category: "bridal",
+                catName: "Bridal Lehengas",
+                price: "PKR 640,000",
+                priceNum: 640000,
+                hours: "510 Karigar Hours",
+                hoursNum: 510,
+                fabric: "Pure Micro-Velvet & Kashmiri Tilla",
+                gradient: "from-[#6B1426] via-[#480A17] to-[#25030A]",
+                accent: "#E7C98B",
+                desc: "Deep ruby red lehenga adorned with authentic Kashmiri tilla marori, uncut polki stones, and hand-pleated box ghera."
+            },
+            {
+                id: 104,
+                title: "Sheesh Mahal Champagne Walima Pishwas",
+                category: "walima",
+                catName: "Walima Pastels",
+                price: "PKR 540,000",
+                priceNum: 540000,
+                hours: "460 Karigar Hours",
+                hoursNum: 460,
+                fabric: "Metallic Silk Tissue & French Net",
+                gradient: "from-[#DDD0B8] via-[#C2AE88] to-[#947C52]",
+                accent: "#3D2B0C",
+                desc: "Ethereal champagne gold floor-sweeping Walima pishwas featuring cutwork crystal borders, pearl drop tassels, and silver-gold naqshi floral motifs."
+            },
+            {
+                id: 105,
+                title: "Zeb-un-Nisa Mint & Silver Walima Gown",
+                category: "walima",
+                catName: "Walima Pastels",
+                price: "PKR 495,000",
+                priceNum: 495000,
+                hours: "430 Karigar Hours",
+                hoursNum: 430,
+                fabric: "Pure Silk Organza & Silver Tissue",
+                gradient: "from-[#B8C9C0] via-[#8FA89B] to-[#617A6D]",
+                accent: "#1C2E24",
+                desc: "Pastel celadon mint bridal gown encrusted with 3D Swarovski crystal florals, silver kasab zardozi, and a dramatic scalloped cathedral trail."
+            },
+            {
+                id: 106,
+                title: "Noor-e-Jahan Emerald Nikkah Ensemble",
+                category: "walima",
+                catName: "Nikkah & Walima",
+                price: "PKR 485,000",
+                priceNum: 485000,
+                hours: "410 Karigar Hours",
+                hoursNum: 410,
+                fabric: "Pure Korean Raw Silk & Jamawar",
+                gradient: "from-[#143B2D] via-[#0B261C] to-[#06140F]",
+                accent: "#E7C98B",
+                desc: "Regal emerald green Nikkah kalidaar pishwas adorned with heirloom gold tilla marori, chatta patti borders, and custom Nikkah dupatta inscription."
+            },
+            {
+                id: 107,
+                title: "Sitara-e-Subh Powder Blue Walima Pishwas",
+                category: "walima",
+                catName: "Walima Pastels",
+                price: "PKR 510,000",
+                priceNum: 510000,
+                hours: "440 Karigar Hours",
+                hoursNum: 440,
+                fabric: "French Net & Crushed Silk Tissue",
+                gradient: "from-[#B8C8D4] via-[#8DA4B5] to-[#5C7588]",
+                accent: "#172A38",
+                desc: "Gossamer icy powder blue bridal silhouette encrusted with silver cutdana, Austrian crystals, and pearl tassel accents on sheer sleeves."
+            },
+            {
+                id: 108,
+                title: "Darbar Emerald Velvet Angrakha",
+                category: "velvet",
+                catName: "Velvet Formals",
+                price: "PKR 395,000",
+                priceNum: 395000,
+                hours: "340 Karigar Hours",
+                hoursNum: 340,
+                fabric: "9000 Micro-Velvet & Banarsi Tissue",
+                gradient: "from-[#0F3828] via-[#092419] to-[#04120D]",
+                accent: "#E7C98B",
+                desc: "Classic Mughal angrakha cut in rich emerald velvet with hand-knotted gold dori, antique marori neckline, and tissue sharara."
+            },
+            {
+                id: 109,
+                title: "Badshahi Plum & Gold Zardozi Gharara",
+                category: "velvet",
+                catName: "Velvet Formals",
+                price: "PKR 425,000",
+                priceNum: 425000,
+                hours: "370 Karigar Hours",
+                hoursNum: 370,
+                fabric: "Pure Kathan Silk & Gold Jamawar",
+                gradient: "from-[#421729] via-[#2D0F1B] to-[#17060D]",
+                accent: "#E7C98B",
+                desc: "Heirloom deep plum velvet formal shirt paired with pure banarsi tissue gharara, featuring kora dabka jaal and gold sitara work."
+            },
+            {
+                id: 110,
+                title: "Alamgir Obsidian Groom Sherwani",
+                category: "sherwani",
+                catName: "Groom Sherwanis",
+                price: "PKR 285,000",
+                priceNum: 285000,
+                hours: "260 Karigar Hours",
+                hoursNum: 260,
+                fabric: "Self-Woven Banarsi Jamawar",
+                gradient: "from-[#282523] via-[#171514] to-[#090808]",
+                accent: "#E7C98B",
+                desc: "Bespoke tailored black jamawar groom sherwani featuring antique gold zardozi collar embroidery, uncut kundan buttons, and matching hand-crafted turban & khussa."
+            },
+            {
+                id: 111,
+                title: "Shahanshah Ivory Raw Silk Sherwani",
+                category: "sherwani",
+                catName: "Groom Sherwanis",
+                price: "PKR 260,000",
+                priceNum: 260000,
+                hours: "230 Karigar Hours",
+                hoursNum: 230,
+                fabric: "Pure Raw Silk & Gold Tissue Shawl",
+                gradient: "from-[#D9CFBE] via-[#B8A992] to-[#80725C]",
+                accent: "#2A2318",
+                desc: "Pure off-white raw silk sherwani designed for the royal groom, accompanied by a hand-embroidered gold tissue shawl and emerald kundan buttons."
+            },
+            {
+                id: 112,
+                title: "Babur Antique Gold Tilla Sherwani",
+                category: "sherwani",
+                catName: "Groom Sherwanis",
+                price: "PKR 295,000",
+                priceNum: 295000,
+                hours: "280 Karigar Hours",
+                hoursNum: 280,
+                fabric: "Brocade Jamawar & Resham Weave",
+                gradient: "from-[#332A1F] via-[#211B13] to-[#120E0A]",
+                accent: "#E7C98B",
+                desc: "Rich antique brass gold groom sherwani with intricate floral arabesque embroidery across the cuffs, neckline, and back yoke."
+            }
+        ];
+
+        const coutureArchive = fullCoutureArchive;
+
+        let wishlistIds = [101, 104];
+        let bagIds = [101];
+
+        let currentView = 'atelier';
+        let currentFilter = 'all';
+        let currentSearchQuery = '';
+        let currentSort = 'curated';
+
+        // View Switcher with Zero WebGL Reload
+        function switchView(viewName) {
+            currentView = viewName;
+            const vAtelier = document.getElementById('view-atelier');
+            const vCatalog = document.getElementById('view-catalog');
+            const navAtelier = document.getElementById('nav-atelier-link');
+            const navCatalog = document.getElementById('nav-catalog-link');
+
+            if (viewName === 'catalog') {
+                if (vAtelier) vAtelier.classList.add('hidden');
+                if (vCatalog) vCatalog.classList.remove('hidden');
+
+                if (navAtelier) {
+                    navAtelier.className = "hover:text-espresso transition-colors relative group cursor-pointer";
+                }
+                if (navCatalog) {
+                    navCatalog.className = "text-espresso font-semibold relative after:content-[''] after:absolute after:-bottom-1.5 after:left-0 after:w-full after:h-[1.5px] after:bg-espresso cursor-pointer";
+                }
+
+                if (history.pushState) {
+                    history.pushState(null, null, '#catalog');
+                } else {
+                    window.location.hash = '#catalog';
+                }
+
+                renderFullCatalog();
+            } else {
+                if (vCatalog) vCatalog.classList.add('hidden');
+                if (vAtelier) vAtelier.classList.remove('hidden');
+
+                if (navCatalog) {
+                    navCatalog.className = "text-goldDeep font-semibold hover:text-espresso transition-colors relative group cursor-pointer";
+                }
+                if (navAtelier) {
+                    navAtelier.className = "text-espresso font-semibold relative after:content-[''] after:absolute after:-bottom-1.5 after:left-0 after:w-full after:h-[1.5px] after:bg-espresso cursor-pointer";
+                }
+
+                if (history.pushState) {
+                    history.pushState(null, null, '#section-hero');
+                }
+            }
+
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            updateScrollTargetFromWindow();
+        }
+
+        window.addEventListener('hashchange', () => {
+            if (window.location.hash === '#catalog') {
+                if (currentView !== 'catalog') switchView('catalog');
+            } else if (currentView === 'catalog') {
+                switchView('atelier');
+            }
+        });
+
+        // Filter and Sort Helpers for Dedicated Catalog
+        function getFilteredAndSortedItems() {
+            let items = [...fullCoutureArchive];
+
+            if (currentFilter !== 'all') {
+                items = items.filter(x => x.category === currentFilter);
+            }
+
+            if (currentSearchQuery.trim()) {
+                const q = currentSearchQuery.toLowerCase().trim();
+                items = items.filter(x =>
+                    x.title.toLowerCase().includes(q) ||
+                    x.fabric.toLowerCase().includes(q) ||
+                    x.desc.toLowerCase().includes(q)
+                );
+            }
+
+            if (currentSort === 'price-desc') {
+                items.sort((a, b) => b.priceNum - a.priceNum);
+            } else if (currentSort === 'price-asc') {
+                items.sort((a, b) => a.priceNum - b.priceNum);
+            } else if (currentSort === 'hours-desc') {
+                items.sort((a, b) => b.hoursNum - a.hoursNum);
+            }
+
+            return items;
+        }
+
+        // Render Home Curated Lookbook (First 6 Masterpieces)
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-grid');
+            if (!grid) return;
+
+            const items = fullCoutureArchive.slice(0, 6);
+
+            grid.innerHTML = items.map(item => {
+                const isWished = wishlistIds.includes(item.id);
+                const waMessage = `Ensemble Inquiry: Hello Zeeshan Danish Couture, I would like to inquire about the "${item.title}" (${item.price}, ${item.hours}) from your Tariq Rd flagship collection.`;
+
+                return `
+                <article class="group bg-studioLight/95 backdrop-blur-md rounded-3xl border border-espresso/10 overflow-hidden shadow-xs hover:shadow-editorial transition-all duration-500 flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-80 bg-gradient-to-b ${item.gradient} p-6 flex flex-col justify-between overflow-hidden">
+                            <div class="absolute inset-4 rounded-t-full border border-white/20 pointer-events-none flex items-center justify-center">
+                                <svg class="w-40 h-44 opacity-35 group-hover:scale-105 transition-transform duration-700" viewBox="0 0 120 140" fill="none">
+                                    <circle cx="60" cy="18" r="4" fill="${item.accent}"/>
+                                    <path d="M52 26 L68 26 L64 52 L56 52 Z" stroke="${item.accent}" stroke-width="1.4" fill="rgba(255,255,255,0.08)"/>
+                                    <path d="M56 52 L64 52 L96 122 L24 122 Z" stroke="${item.accent}" stroke-width="1.5" fill="rgba(255,255,255,0.06)"/>
+                                    <path d="M60 52 L60 122 M48 52 L38 122 M72 52 L82 122" stroke="${item.accent}" stroke-width="0.8" stroke-dasharray="2 2"/>
+                                    <path d="M24 116 Q60 124 96 116" stroke="${item.accent}" stroke-width="2.5"/>
+                                </svg>
+                            </div>
+
+                            <div class="relative z-10 flex items-center justify-between">
+                                <span class="px-3 py-1 rounded-full bg-black/35 backdrop-blur-md text-[10px] uppercase tracking-[0.2em] text-white border border-white/15 font-cinzel">
+                                    ${item.catName}
+                                </span>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="inquireOnWhatsApp('${waMessage}')" aria-label="Inquire via WhatsApp" class="w-9 h-9 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center hover:scale-110 transition-transform shadow cursor-pointer" title="Inquire on WhatsApp">
+                                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                                    </button>
+                                    <button onclick="toggleWishlist(${item.id})" aria-label="Save to Wishlist" class="w-9 h-9 rounded-full bg-white/90 text-espresso flex items-center justify-center hover:scale-110 transition-transform shadow cursor-pointer">
+                                        <i class="${isWished ? 'fa-solid text-crimson' : 'fa-regular'} fa-heart text-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="relative z-10 my-auto text-center">
+                                <span class="inline-block px-3.5 py-1 rounded-full bg-black/25 backdrop-blur-xs text-[10px] uppercase tracking-[0.24em] text-white/95 border border-white/15">
+                                    ${item.hours}
+                                </span>
+                            </div>
+
+                            <div class="relative z-10 flex items-center justify-between text-[11px] text-white/85 pt-3 border-t border-white/15">
+                                <span><i class="fa-solid fa-sparkles mr-1.5 opacity-80"></i>${item.fabric}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <h3 class="font-serif text-2xl text-espresso font-bold group-hover:text-goldDeep transition-colors">${item.title}</h3>
+                            <p class="text-xs text-muted mt-2 line-clamp-2 leading-relaxed">${item.desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6 pt-3 border-t border-espresso/5 flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-[9.5px] uppercase tracking-wider text-muted block">Bespoke Atelier Price</span>
+                                <span class="font-serif text-xl font-bold text-espresso">${item.price}</span>
+                            </div>
+                            <button onclick="inquireOnWhatsApp('${waMessage}')" class="text-[10px] font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 uppercase tracking-wider cursor-pointer">
+                                <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                                <span>WhatsApp Inquire</span>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="openQuickView(${item.id})" class="w-full py-2.5 rounded-full border border-espresso/20 hover:border-espresso text-[10px] uppercase tracking-wider font-semibold transition-colors text-center cursor-pointer">
+                                Quick View
+                            </button>
+                            <button onclick="addToCoutureBag(${item.id})" class="w-full py-2.5 rounded-full bg-espressoBtn hover:bg-goldDeep text-white text-[10px] uppercase tracking-wider font-semibold transition-colors text-center cursor-pointer">
+                                + Fitting Bag
+                            </button>
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('');
+        }
+
+        // Render Dedicated Full Catalog (12 Masterpieces with Filters & Search)
+        function renderFullCatalog() {
+            const grid = document.getElementById('full-catalog-grid');
+            if (!grid) return;
+            const items = getFilteredAndSortedItems();
+
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-20 text-center editorial-accent-card rounded-3xl p-10">
+                        <i class="fa-solid fa-magnifying-glass text-4xl text-goldDeep/40 mb-3"></i>
+                        <h3 class="font-serif text-2xl text-espresso font-bold">No Ensembles Found</h3>
+                        <p class="text-xs text-muted mt-1">Try adjusting your category filter or search keywords.</p>
+                        <button onclick="resetFilters()" class="mt-5 btn-pill-video text-xs uppercase tracking-widest px-6 py-3 rounded-full cursor-pointer">
+                            Reset All Filters
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = items.map(item => {
+                const isWished = wishlistIds.includes(item.id);
+                return `
+                <article class="group bg-studioLight/95 backdrop-blur-md rounded-3xl border border-espresso/10 overflow-hidden shadow-xs hover:shadow-editorial transition-all duration-500 flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-80 bg-gradient-to-b ${item.gradient} p-6 flex flex-col justify-between overflow-hidden">
+                            <div class="absolute inset-4 rounded-t-full border border-white/20 pointer-events-none flex items-center justify-center">
+                                <svg class="w-40 h-44 opacity-35 group-hover:scale-105 transition-transform duration-700" viewBox="0 0 120 140" fill="none">
+                                    <circle cx="60" cy="18" r="4" fill="${item.accent}"/>
+                                    <path d="M52 26 L68 26 L64 52 L56 52 Z" stroke="${item.accent}" stroke-width="1.4" fill="rgba(255,255,255,0.08)"/>
+                                    <path d="M56 52 L64 52 L96 122 L24 122 Z" stroke="${item.accent}" stroke-width="1.5" fill="rgba(255,255,255,0.06)"/>
+                                    <path d="M60 52 L60 122 M48 52 L38 122 M72 52 L82 122" stroke="${item.accent}" stroke-width="0.8" stroke-dasharray="2 2"/>
+                                    <path d="M24 116 Q60 124 96 116" stroke="${item.accent}" stroke-width="2.5"/>
+                                </svg>
+                            </div>
+
+                            <div class="relative z-10 flex items-center justify-between">
+                                <span class="px-3 py-1 rounded-full bg-black/35 backdrop-blur-md text-[10px] uppercase tracking-[0.2em] text-white border border-white/15 font-cinzel">
+                                    ${item.catName}
+                                </span>
+                                <button onclick="toggleWishlist(${item.id})" aria-label="Save to Wishlist" class="w-9 h-9 rounded-full bg-white/90 text-espresso flex items-center justify-center hover:scale-110 transition-transform shadow cursor-pointer">
+                                    <i class="${isWished ? 'fa-solid text-crimson' : 'fa-regular'} fa-heart text-sm"></i>
+                                </button>
+                            </div>
+
+                            <div class="relative z-10 my-auto text-center">
+                                <span class="inline-block px-3.5 py-1 rounded-full bg-black/25 backdrop-blur-xs text-[10px] uppercase tracking-[0.24em] text-white/95 border border-white/15">
+                                    ${item.hours}
+                                </span>
+                            </div>
+
+                            <div class="relative z-10 flex items-center justify-between text-[11px] text-white/85 pt-3 border-t border-white/15">
+                                <span><i class="fa-solid fa-sparkles mr-1.5 opacity-80"></i>${item.fabric}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <h3 class="font-serif text-2xl text-espresso font-bold group-hover:text-goldDeep transition-colors">${item.title}</h3>
+                            <p class="text-xs text-muted mt-2 line-clamp-2 leading-relaxed">${item.desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6 pt-4 border-t border-espresso/5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-[9.5px] uppercase tracking-wider text-muted block">Bespoke Atelier Price</span>
+                                <span class="font-serif text-xl font-bold text-espresso">${item.price}</span>
+                            </div>
+                            <button onclick="inquireOnWhatsApp('Product Inquiry: Hello Zeeshan Danish Couture, I would like to inquire about the ${item.title} (${item.price}, ${item.hours}) crafted in ${item.fabric}. Can I schedule a trial at Royal Residency, Emerald, Main Tariq Rd?')" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-700/30 text-emerald-900 text-[10.5px] font-bold tracking-wider transition-colors shadow-xs cursor-pointer">
+                                <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                                <span>WhatsApp Inquire</span>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="openQuickView(${item.id})" class="w-full py-2.5 rounded-full border border-espresso/20 hover:border-espresso text-[10.5px] uppercase tracking-wider font-semibold transition-colors text-center cursor-pointer">
+                                Quick View
+                            </button>
+                            <button onclick="addToCoutureBag(${item.id})" class="w-full py-2.5 rounded-full bg-espressoBtn hover:bg-goldDeep text-white text-[10.5px] uppercase tracking-wider font-semibold transition-colors text-center cursor-pointer">
+                                + Fitting Bag
+                            </button>
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('');
+        }
+
+        function filterCatalog(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-pill px-5 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-semibold transition-all bg-espresso text-white shadow cursor-pointer";
+                } else {
+                    btn.className = "cat-pill px-5 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-semibold transition-all bg-white/80 border border-espresso/10 text-muted hover:text-espresso cursor-pointer";
+                }
+            });
+            renderFullCatalog();
+        }
+
+        function applyInlineSearch(val) {
+            currentSearchQuery = val;
+            renderFullCatalog();
+        }
+
+        function sortCatalog(sortVal) {
+            currentSort = sortVal;
+            renderFullCatalog();
+        }
+
+        function resetFilters() {
+            currentFilter = 'all';
+            currentSearchQuery = '';
+            currentSort = 'curated';
+            const searchEl = document.getElementById('catalog-inline-search');
+            if (searchEl) searchEl.value = '';
+            const sortEl = document.getElementById('catalog-sort');
+            if (sortEl) sortEl.value = 'curated';
+            filterCatalog('all');
+        }
+
+        function updateBadges() {
+            const wB = document.getElementById('wishlist-badge');
+            const bB = document.getElementById('bag-badge');
+            if (wB) wB.textContent = wishlistIds.length;
+            if (bB) bB.textContent = bagIds.length;
+        }
+
+        function toggleWishlist(id) {
+            if (wishlistIds.includes(id)) wishlistIds = wishlistIds.filter(x => x !== id);
+            else wishlistIds.push(id);
+            updateBadges();
+            renderCatalog();
+            renderFullCatalog();
+        }
+
+        function addToCoutureBag(id) {
+            if (!bagIds.includes(id)) bagIds.push(id);
+            updateBadges();
+            toggleDrawer('bag');
+        }
+
+        function toggleDrawer(mode) {
+            const drawer = document.getElementById('atelier-drawer');
+            const title = document.getElementById('drawer-title');
+            const container = document.getElementById('drawer-items-container');
+            drawer.classList.remove('hidden');
+
+            const list = mode === 'wishlist' ? wishlistIds : bagIds;
+            title.textContent = mode === 'wishlist' ? 'Saved Bridal Wishlist' : 'Couture Fitting Bag';
+
+            if (list.length === 0) {
+                container.innerHTML = `<p class="text-xs text-muted py-8 text-center">No ensembles selected yet. Explore the Couture Collections to add looks for your Tariq Rd studio trial.</p>`;
+                return;
+            }
+
+            container.innerHTML = list.map(id => {
+                const item = fullCoutureArchive.find(x => x.id === id);
+                if (!item) return '';
+                return `
+                <div class="p-4 rounded-2xl bg-studioWarm/60 border border-espresso/10 flex items-center justify-between gap-4">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider text-goldDeep font-semibold font-cinzel">${item.catName}</span>
+                        <h4 class="font-serif text-lg font-bold text-espresso">${item.title}</h4>
+                        <p class="text-xs text-muted">${item.price} • ${item.hours}</p>
+                    </div>
+                    <button onclick="removeDrawerItem('${mode}', ${item.id})" class="text-xs text-muted hover:text-crimson p-2 cursor-pointer">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function inquireDrawerOnWhatsApp() {
+            const items = bagIds.map(id => {
+                const item = fullCoutureArchive.find(x => x.id === id);
+                return item ? `• ${item.title} (${item.price})` : '';
+            }).filter(Boolean).join('\n');
+
+            const msg = `Fitting Bag Inquiry: Hello Zeeshan Danish Couture, I would like to inquire about booking a trial at your Royal Residency, Emerald, Main Tariq Rd atelier for the following ensembles in my bag:\n\n${items}`;
+            inquireOnWhatsApp(msg);
+        }
+
+        function removeDrawerItem(mode, id) {
+            if (mode === 'wishlist') wishlistIds = wishlistIds.filter(x => x !== id);
+            else bagIds = bagIds.filter(x => x !== id);
+            updateBadges();
+            renderCatalog();
+            renderFullCatalog();
+            toggleDrawer(mode);
+        }
+
+        function closeAtelierDrawer() {
+            document.getElementById('atelier-drawer').classList.add('hidden');
+        }
+
+        function openQuickView(id) {
+            const item = fullCoutureArchive.find(x => x.id === id);
+            if (!item) return;
+            const modal = document.getElementById('atelier-modal');
+            const content = document.getElementById('atelier-modal-content');
+
+            content.innerHTML = `
+                <span class="text-[10px] uppercase tracking-[0.26em] text-goldDeep font-semibold font-cinzel">${item.catName} • Archive Quick View</span>
+                <h3 class="font-serif text-3xl text-espresso font-bold mt-1">${item.title}</h3>
+                <p class="font-serif text-xl text-goldDeep font-semibold mt-0.5">${item.price}</p>
+                <p class="text-xs text-muted leading-relaxed mt-4">${item.desc}</p>
+
+                <div class="mt-5 p-4 rounded-2xl bg-studioWarm/60 border border-espresso/10 space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-muted">Pure Textiles:</span><span class="font-semibold text-espresso">${item.fabric}</span></div>
+                    <div class="flex justify-between"><span class="text-muted">Hand-Adda Craft:</span><span class="font-semibold text-espresso">${item.hours}</span></div>
+                    <div class="flex justify-between"><span class="text-muted">Flagship Lounge:</span><span class="font-semibold text-goldDeep">Royal Residency, Emerald, Main Tariq Rd</span></div>
+                </div>
+
+                <div class="mt-6 flex flex-col sm:flex-row gap-2.5">
+                    <button onclick="closeAtelierModal(); addToCoutureBag(${item.id})" class="flex-1 btn-pill-video text-xs uppercase tracking-[0.18em] font-semibold py-3.5 rounded-full cursor-pointer">
+                        + Add to Tariq Rd Fitting Bag
+                    </button>
+                    <button onclick="inquireOnWhatsApp('Quick View Inquiry: Hello Zeeshan Danish Couture, I am looking at ${item.title} (${item.price}) and would like to check availability for a trial at your Tariq Rd studio.')" class="px-5 py-3.5 rounded-full border border-emerald-700/40 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs uppercase tracking-wider font-bold transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-emerald-600 text-base"></i>
+                        <span>Inquire on WhatsApp</span>
+                    </button>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function openConciergeModal(heading) {
+            inquireOnWhatsApp(`Concierge Inquiry: Hello Zeeshan Danish Couture, I am contacting you regarding: ${heading} at Royal Residency, Emerald, Main Tariq Rd.`);
+        }
+
+        function closeAtelierModal() {
+            document.getElementById('atelier-modal').classList.add('hidden');
+        }
+
+        function selectApptType(mode) {
+            document.getElementById('booking-mode-input').value = mode;
+            const list = ['Bridal Couture Trial', 'Groom & Bespoke Fitting', 'Overseas Video Consult'];
+            list.forEach((m, i) => {
+                const btn = document.getElementById(`appt-mode-${i}`);
+                if (m === mode) {
+                    btn.className = "py-3 px-4 rounded-xl border-2 border-espresso bg-espresso text-white text-xs font-semibold text-left flex items-center justify-between";
+                } else {
+                    btn.className = "py-3 px-4 rounded-xl border border-espresso/15 bg-studioLight text-espresso text-xs font-semibold text-left flex items-center justify-between hover:border-espresso";
+                }
+            });
+        }
+
+        function submitBookingDirectToWhatsApp() {
+            const name = document.getElementById('client-name').value.trim() || 'Client';
+            const phone = document.getElementById('client-phone').value.trim() || 'Not specified';
+            const mode = document.getElementById('booking-mode-input').value;
+            const date = document.getElementById('client-date').value || 'Upcoming date';
+            const slot = document.getElementById('client-slot').value;
+            const notes = document.getElementById('client-notes').value.trim();
+
+            const msg = `Appointment Booking Request:\n\n• Client: ${name}\n• Phone: ${phone}\n• Service: ${mode}\n• Preferred Date: ${date}\n• Time Slot: ${slot}\n• Location: Royal Residency, Emerald, Main Tariq Rd, Karachi\n• Notes: ${notes || 'None'}`;
+            inquireOnWhatsApp(msg);
+        }
+
+        function submitAtelierBooking(e) {
+            e.preventDefault();
+            const name = document.getElementById('client-name').value;
+            const mode = document.getElementById('booking-mode-input').value;
+            const date = document.getElementById('client-date').value;
+            const slot = document.getElementById('client-slot').value;
+
+            const modal = document.getElementById('atelier-modal');
+            const content = document.getElementById('atelier-modal-content');
+
+            content.innerHTML = `
+                <div class="text-center py-4 space-y-3">
+                    <div class="w-14 h-14 rounded-full bg-gold/20 text-goldDeep mx-auto flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <span class="text-[10px] uppercase tracking-[0.26em] text-goldDeep font-semibold font-cinzel">Tariq Rd Studio Pass Reserved</span>
+                    <h3 class="font-serif text-3xl text-espresso font-bold">Welcome to Zeeshan Danish, ${name}</h3>
+                    <p class="text-xs text-muted leading-relaxed">
+                        Your <strong>${mode}</strong> is confirmed for <strong>${date} (${slot})</strong> at:<br>
+                        <span class="text-espresso font-semibold">Zeeshan Danish Couture, Royal Residency, Emerald, Main Tariq Rd, Karachi</span>.
+                    </p>
+                    <div class="pt-3 flex flex-col sm:flex-row gap-2.5 justify-center">
+                        <button onclick="submitBookingDirectToWhatsApp()" class="btn-pill-video text-xs uppercase tracking-wider font-semibold py-3 px-6 rounded-full flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i>
+                            <span>Confirm via WhatsApp Desk</span>
+                        </button>
+                        <button onclick="closeAtelierModal()" class="px-6 py-3 rounded-full border border-espresso/20 text-espresso text-xs uppercase tracking-widest cursor-pointer">
+                            Done
+                        </button>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function copyAtelierAddress() {
+            const addr = "Zeeshan Danish Couture, Royal Residency, Emerald, Main Tariq Rd, Karachi";
+            const t = document.createElement('textarea');
+            t.value = addr;
+            document.body.appendChild(t);
+            t.select();
+            document.execCommand('copy');
+            document.body.removeChild(t);
+
+            const status = document.getElementById('copy-address-status');
+            if (status) {
+                status.textContent = "Address Copied ✓";
+                setTimeout(() => { status.textContent = "Copy Studio Address"; }, 2500);
+            }
+        }
+
+        function toggleSearchModal() {
+            const modal = document.getElementById('search-modal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                document.getElementById('archive-search-input').focus();
+                executeArchiveSearch('');
+            }
+        }
+
+        function executeArchiveSearch(query) {
+            const q = query.toLowerCase().trim();
+            const matches = fullCoutureArchive.filter(x =>
+                x.title.toLowerCase().includes(q) ||
+                x.catName.toLowerCase().includes(q) ||
+                x.fabric.toLowerCase().includes(q)
+            );
+            document.getElementById('archive-search-results').innerHTML = matches.map(item => `
+                <div onclick="toggleSearchModal(); openQuickView(${item.id})" class="p-4 rounded-2xl bg-white border border-espresso/10 hover:border-goldDeep cursor-pointer flex items-center justify-between transition-all">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider text-goldDeep font-semibold font-cinzel">${item.catName}</span>
+                        <h4 class="font-serif text-xl font-bold text-espresso">${item.title}</h4>
+                        <p class="text-xs text-muted">${item.price}</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-right text-goldDeep"></i>
+                </div>
+            `).join('');
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Start 4K Scroll-Driven WebGL Studio & Lookbook on Window Load
+        window.onload = function () {
+            initCoutureWebGL();
+            renderCatalog();
+            renderFullCatalog();
+            updateBadges();
+
+            if (window.location.hash === '#catalog') {
+                switchView('catalog');
+            } else {
+                switchView('atelier');
+            }
+
+            requestAnimationFrame(animateCoutureWebGL);
+
+            const datePicker = document.getElementById('client-date');
+            if (datePicker) {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                datePicker.value = tomorrow.toISOString().split('T')[0];
+            }
+        };
+    </script>
+</body>
+</html>
